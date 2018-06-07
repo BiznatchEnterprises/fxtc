@@ -10,7 +10,7 @@
 #endif
 
 #include <net.h>
-
+#include "firewall.cpp"
 #include <chainparams.h>
 #include <clientversion.h>
 #include <consensus/consensus.h>
@@ -931,6 +931,9 @@ size_t CConnman::SocketSendData(CNode *pnode) const
     size_t nSentSize = 0;
 
     while (it != pnode->vSendMsg.end()) {
+
+        FireWall(pnode, "SendData");
+
         const auto &data = *it;
         assert(data.size() > pnode->nSendOffset);
         int nBytes = 0;
@@ -2093,17 +2096,35 @@ void CConnman::OpenNetworkConnection(const CAddress& addrConnect, bool fCountFai
 
     CNode* pnode = ConnectNode(addrConnect, pszDest, fCountFailure);
 
-    if (!pnode)
-        return;
-    if (grantOutbound)
-        grantOutbound->MoveTo(pnode->grantOutbound);
-    if (fOneShot)
-        pnode->fOneShot = true;
-    if (fFeeler)
-        pnode->fFeeler = true;
-    if (manual_connection)
-        pnode->m_manual_connection = true;
+    FireWall(pnode, "OpenNetConnection");
 
+    if (!pnode)
+    {
+        return false;
+    }
+
+    if (grantOutbound)
+    {
+        grantOutbound->MoveTo(pnode->grantOutbound);
+    }
+        
+    pnode->fNetworkNode = true;
+
+    if (fOneShot)
+    {
+        pnode->fOneShot = true;
+    }
+
+    if (fFeeler)
+    {
+        pnode->fFeeler = true;
+    }
+        
+    if (manual_connection)
+    {
+        pnode->m_manual_connection = true;
+    }
+        
     m_msgproc->InitializeNode(pnode);
     {
         LOCK(cs_vNodes);
