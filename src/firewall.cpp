@@ -74,7 +74,7 @@ double FIREWALL_TRAFFIC_TOLERANCE = 0.0001; // Reduce for minimal fluctuation
 double FIREWALL_TRAFFIC_ZONE = 4; // + or - Traffic Range 
 
 // *** Firewall Debug (Live Output) ***
-bool FIREWALL_LIVE_DEBUG = true;
+bool FIREWALL_LIVE_DEBUG = false;
 bool FIREWALL_LIVEDEBUG_EXAM = true;
 bool FIREWALL_LIVEDEBUG_BANS = true;
 bool FIREWALL_LIVEDEBUG_BLACKLIST = true;
@@ -1049,14 +1049,11 @@ void Examination(CNode *pnode, string FromFunction)
             Firewall_AverageTraffic_Max = Firewall_AverageTraffic + (double)FIREWALL_TRAFFIC_ZONE;
 
             int Connections = (int)g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL);
-
-            int CurrentAverageSend = 0;
-            int CurrentAverageRecv = 0;
             
             if (Connections > 0)
             {
-                CurrentAverageSend = CurrentAverageSend + pnode->nSendBytes / Connections;
-                CurrentAverageRecv = CurrentAverageRecv + pnode->nRecvBytes / Connections;
+                Firewall_AverageSend = Firewall_AverageSend + pnode->nSendBytes / Connections;
+                Firewall_AverageRecv = Firewall_AverageRecv + pnode->nRecvBytes / Connections;
             }
 
             if (FIREWALL_LIVE_DEBUG == true)
