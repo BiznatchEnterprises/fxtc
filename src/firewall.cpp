@@ -1,5 +1,5 @@
-// [Bitcoin Firewall 1.2.4
-// March 30, 2018 - Biznatch Enterprises & BATA Development
+// [Bitcoin Firewall 1.3.0 (Core 16)
+// © June 10, 2018 - Biznatch Enterprises, BATA Development & Profit Hunters Coin
 // https://github.com/BiznatchEnterprises/BitcoinFirewall
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -8,6 +8,7 @@
 #include "firewall.h"
 #include <string>
 #include "addrman.h"
+#include "addrdb.h"
 
 #ifdef WIN32
 #include <string.h>
@@ -23,7 +24,6 @@ using namespace boost;
 using namespace std;
 
 
-
 // * Function: BoolToString *
 inline const char * const BoolToString(bool b)
 {
@@ -32,7 +32,7 @@ inline const char * const BoolToString(bool b)
 
 
 // * Function: CountArray *
-int CountStringArray(string *ArrayName)
+int CountStringArray(std::string *ArrayName)
 {
     int tmp_cnt;
     tmp_cnt = 0;
@@ -63,10 +63,10 @@ return tmp_cnt;
 
 
 
-string ModuleName = "[Bitcoin Firewall 1.2.4]";
+std::string ModuleName = "[Bitcoin Firewall 1.3.0]";
 
 // *** Firewall Controls (General) ***
-bool FIREWALL_ENABLED = false;
+bool FIREWALL_ENABLED = true;
 bool FIREWALL_CLEAR_BLACKLIST = false;
 bool FIREWALL_CLEAR_BANS = true;
 int FIREWALL_CLEARBANS_MINNODES = 5;
@@ -74,7 +74,7 @@ double FIREWALL_TRAFFIC_TOLERANCE = 0.0001; // Reduce for minimal fluctuation
 double FIREWALL_TRAFFIC_ZONE = 4; // + or - Traffic Range 
 
 // *** Firewall Debug (Live Output) ***
-bool FIREWALL_LIVE_DEBUG = false;
+bool FIREWALL_LIVE_DEBUG = true;
 bool FIREWALL_LIVEDEBUG_EXAM = true;
 bool FIREWALL_LIVEDEBUG_BANS = true;
 bool FIREWALL_LIVEDEBUG_BLACKLIST = true;
@@ -137,7 +137,7 @@ int FIREWALL_BANTIME_FLOODINGWALLET = 60*60; // 1 hour
 int FIREWALL_FLOODINGWALLET_MINBYTES = 1000000;
 int FIREWALL_FLOODINGWALLET_MAXBYTES = 1000000;
 // Flooding Patterns (WARNINGS)
-string FIREWALL_FLOODPATTERNS[256] =
+std::string FIREWALL_FLOODPATTERNS[256] =
 {
     "56810121416192123", 
     "57910121517202223",
@@ -149,13 +149,13 @@ int FIREWALL_FLOODINGWALLET_MINCHECK = 30; // seconds
 int FIREWALL_FLOODINGWALLET_MAXCHECK = 90; // seconds
 
 // Firewall Whitelist (ignore)
-string FIREWALL_WHITELIST[256] =
+std::string FIREWALL_WHITELIST[256] =
 {
 
 };
 
 // * Firewall BlackList Settings *
-string FIREWALL_BLACKLIST[256] =
+std::string FIREWALL_BLACKLIST[256] =
 {
 
 };
@@ -172,81 +172,81 @@ int Firewall_AverageSend = 0;
 int Firewall_AverageRecv = 0;
 int ALL_CHECK_TIMER = GetTime();
 
-// * Function: LoadFirewallSettings (phc.conf)*
+// * Function: LoadFirewallSettings (fxtc.conf)*
 void LoadFirewallSettings()
 {
     // *** Firewall Controls (General) ***
-    FIREWALL_ENABLED = GetBoolArg("-firewallenabled", FIREWALL_ENABLED);
-    FIREWALL_CLEAR_BLACKLIST = GetBoolArg("-firewallclearblacklist", FIREWALL_CLEAR_BLACKLIST);
-    FIREWALL_CLEAR_BANS = GetBoolArg("-firewallclearbanlist", FIREWALL_CLEAR_BANS);
+    FIREWALL_ENABLED = gArgs.GetBoolArg("-firewallenabled", FIREWALL_ENABLED);
+    FIREWALL_CLEAR_BLACKLIST = gArgs.GetBoolArg("-firewallclearblacklist", FIREWALL_CLEAR_BLACKLIST);
+    FIREWALL_CLEAR_BANS = gArgs.GetBoolArg("-firewallclearbanlist", FIREWALL_CLEAR_BANS);
 
     // *** Firewall Debug (Live Output) ***
-    FIREWALL_LIVE_DEBUG = GetBoolArg("-firewalldebug", FIREWALL_LIVE_DEBUG);
-    FIREWALL_LIVEDEBUG_EXAM = GetBoolArg("-firewalldebugexam", FIREWALL_LIVEDEBUG_EXAM);
-    FIREWALL_LIVEDEBUG_BANS = GetBoolArg("-firewalldebugbans", FIREWALL_LIVEDEBUG_BANS);
-    FIREWALL_LIVEDEBUG_BLACKLIST = GetBoolArg("-firewalldebugblacklist", FIREWALL_LIVEDEBUG_BLACKLIST);
-    FIREWALL_LIVEDEBUG_DISCONNECT = GetBoolArg("-firewalldebugdisconnect", FIREWALL_LIVEDEBUG_DISCONNECT);
-    FIREWALL_LIVEDEBUG_BANDWIDTHABUSE = GetBoolArg("-firewalldebugbandwidthabuse", FIREWALL_LIVEDEBUG_BANDWIDTHABUSE);
-    FIREWALL_LIVEDEBUG_NOFALSEPOSITIVE = GetBoolArg("-firewalldebugnofalsepositivebandwidthabuse", FIREWALL_LIVEDEBUG_NOFALSEPOSITIVE);
-    FIREWALL_LIVEDEBUG_INVALIDWALLET = GetBoolArg("-firewalldebuginvalidwallet", FIREWALL_LIVEDEBUG_INVALIDWALLET);
-    FIREWALL_LIVEDEBUG_FORKEDWALLET = GetBoolArg("-firewalldebugforkedwallet", FIREWALL_LIVEDEBUG_FORKEDWALLET);
-    FIREWALL_LIVEDEBUG_FLOODINGWALLET = GetBoolArg("-firewalldebugfloodingwallet", FIREWALL_LIVEDEBUG_FLOODINGWALLET);
+    FIREWALL_LIVE_DEBUG = gArgs.GetBoolArg("-firewalldebug", FIREWALL_LIVE_DEBUG);
+    FIREWALL_LIVEDEBUG_EXAM = gArgs.GetBoolArg("-firewalldebugexam", FIREWALL_LIVEDEBUG_EXAM);
+    FIREWALL_LIVEDEBUG_BANS = gArgs.GetBoolArg("-firewalldebugbans", FIREWALL_LIVEDEBUG_BANS);
+    FIREWALL_LIVEDEBUG_BLACKLIST = gArgs.GetBoolArg("-firewalldebugblacklist", FIREWALL_LIVEDEBUG_BLACKLIST);
+    FIREWALL_LIVEDEBUG_DISCONNECT = gArgs.GetBoolArg("-firewalldebugdisconnect", FIREWALL_LIVEDEBUG_DISCONNECT);
+    FIREWALL_LIVEDEBUG_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewalldebugbandwidthabuse", FIREWALL_LIVEDEBUG_BANDWIDTHABUSE);
+    FIREWALL_LIVEDEBUG_NOFALSEPOSITIVE = gArgs.GetBoolArg("-firewalldebugnofalsepositivebandwidthabuse", FIREWALL_LIVEDEBUG_NOFALSEPOSITIVE);
+    FIREWALL_LIVEDEBUG_INVALIDWALLET = gArgs.GetBoolArg("-firewalldebuginvalidwallet", FIREWALL_LIVEDEBUG_INVALIDWALLET);
+    FIREWALL_LIVEDEBUG_FORKEDWALLET = gArgs.GetBoolArg("-firewalldebugforkedwallet", FIREWALL_LIVEDEBUG_FORKEDWALLET);
+    FIREWALL_LIVEDEBUG_FLOODINGWALLET = gArgs.GetBoolArg("-firewalldebugfloodingwallet", FIREWALL_LIVEDEBUG_FLOODINGWALLET);
 
     // *** Firewall Controls (Bandwidth Abuse) ***
-    FIREWALL_DETECT_BANDWIDTHABUSE = GetBoolArg("-firewalldetectbandwidthabuse", FIREWALL_DETECT_BANDWIDTHABUSE);
-    FIREWALL_BLACKLIST_BANDWIDTHABUSE = GetBoolArg("-firewallblacklistbandwidthabuse", FIREWALL_BLACKLIST_BANDWIDTHABUSE);
-    FIREWALL_BAN_BANDWIDTHABUSE = GetBoolArg("-firewallbanbandwidthabuse", FIREWALL_BAN_BANDWIDTHABUSE);
-    FIREWALL_NOFALSEPOSITIVE_BANDWIDTHABUSE = GetBoolArg("-firewallnofalsepositivebandwidthabuse", FIREWALL_NOFALSEPOSITIVE_BANDWIDTHABUSE);
+    FIREWALL_DETECT_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewalldetectbandwidthabuse", FIREWALL_DETECT_BANDWIDTHABUSE);
+    FIREWALL_BLACKLIST_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewallblacklistbandwidthabuse", FIREWALL_BLACKLIST_BANDWIDTHABUSE);
+    FIREWALL_BAN_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewallbanbandwidthabuse", FIREWALL_BAN_BANDWIDTHABUSE);
+    FIREWALL_NOFALSEPOSITIVE_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewallnofalsepositivebandwidthabuse", FIREWALL_NOFALSEPOSITIVE_BANDWIDTHABUSE);
 
     // *** Firewall Controls (Invalid Peer Wallets) ***
-    FIREWALL_DETECT_INVALIDWALLET = GetBoolArg("-firewalldetectinvalidwallet", FIREWALL_DETECT_INVALIDWALLET);
-    FIREWALL_BLACKLIST_INVALIDWALLET = GetBoolArg("-firewallblacklistinvalidwallet", FIREWALL_BLACKLIST_INVALIDWALLET);
-    FIREWALL_BAN_INVALIDWALLET = GetBoolArg("-firewallbaninvalidwallet", FIREWALL_BAN_INVALIDWALLET);
+    FIREWALL_DETECT_INVALIDWALLET = gArgs.GetBoolArg("-firewalldetectinvalidwallet", FIREWALL_DETECT_INVALIDWALLET);
+    FIREWALL_BLACKLIST_INVALIDWALLET = gArgs.GetBoolArg("-firewallblacklistinvalidwallet", FIREWALL_BLACKLIST_INVALIDWALLET);
+    FIREWALL_BAN_INVALIDWALLET = gArgs.GetBoolArg("-firewallbaninvalidwallet", FIREWALL_BAN_INVALIDWALLET);
 
     // *** Firewall Controls (Forked Peer Wallets) ***
-    FIREWALL_DETECT_FORKEDWALLET = GetBoolArg("-firewalldetectforkedwallet", FIREWALL_DETECT_FORKEDWALLET);
-    FIREWALL_BLACKLIST_FORKEDWALLET = GetBoolArg("-firewallblacklistforkedwallet", FIREWALL_BLACKLIST_FORKEDWALLET);
-    FIREWALL_BAN_FORKEDWALLET = GetBoolArg("-firewallbanforkedwallet", FIREWALL_BAN_FORKEDWALLET);
+    FIREWALL_DETECT_FORKEDWALLET = gArgs.GetBoolArg("-firewalldetectforkedwallet", FIREWALL_DETECT_FORKEDWALLET);
+    FIREWALL_BLACKLIST_FORKEDWALLET = gArgs.GetBoolArg("-firewallblacklistforkedwallet", FIREWALL_BLACKLIST_FORKEDWALLET);
+    FIREWALL_BAN_FORKEDWALLET = gArgs.GetBoolArg("-firewallbanforkedwallet", FIREWALL_BAN_FORKEDWALLET);
 
     // *** Firewall Controls (Flooding Peer Wallets) ***
-    FIREWALL_DETECT_FLOODINGWALLET = GetBoolArg("-firewalldetectfloodingwallet", FIREWALL_DETECT_FLOODINGWALLET);
-    FIREWALL_BLACKLIST_FLOODINGWALLET = GetBoolArg("-firewallblacklistfloodingwallet", FIREWALL_BLACKLIST_FLOODINGWALLET);
-    FIREWALL_BAN_FLOODINGWALLET = GetBoolArg("-firewallbanfloodingwallet", FIREWALL_BAN_FLOODINGWALLET);
+    FIREWALL_DETECT_FLOODINGWALLET = gArgs.GetBoolArg("-firewalldetectfloodingwallet", FIREWALL_DETECT_FLOODINGWALLET);
+    FIREWALL_BLACKLIST_FLOODINGWALLET = gArgs.GetBoolArg("-firewallblacklistfloodingwallet", FIREWALL_BLACKLIST_FLOODINGWALLET);
+    FIREWALL_BAN_FLOODINGWALLET = gArgs.GetBoolArg("-firewallbanfloodingwallet", FIREWALL_BAN_FLOODINGWALLET);
 
     // * Firewall Settings (Exam) *
-    FIREWALL_TRAFFIC_TOLERANCE = GetArg("-firewalltraffictolerance", FIREWALL_TRAFFIC_TOLERANCE);
-    FIREWALL_TRAFFIC_ZONE = GetArg("-firewalltrafficzone", FIREWALL_TRAFFIC_ZONE);
+    FIREWALL_TRAFFIC_TOLERANCE = gArgs.GetArg("-firewalltraffictolerance", FIREWALL_TRAFFIC_TOLERANCE);
+    FIREWALL_TRAFFIC_ZONE = gArgs.GetArg("-firewalltrafficzone", FIREWALL_TRAFFIC_ZONE);
 
     // * Firewall Settings (Bandwidth Abuse) *
-    FIREWALL_BANTIME_BANDWIDTHABUSE = GetArg("-firewallbantimebandwidthabuse", FIREWALL_BANTIME_BANDWIDTHABUSE);
-    FIREWALL_BANDWIDTHABUSE_MAXCHECK = GetArg("-firewallbandwidthabusemaxcheck", FIREWALL_BANDWIDTHABUSE_MAXCHECK);
-    FIREWALL_BANDWIDTHABUSE_MINATTACK = GetArg("-firewallbandwidthabuseminattack", FIREWALL_BANDWIDTHABUSE_MINATTACK);
-    FIREWALL_BANDWIDTHABUSE_MAXATTACK = GetArg("-firewallbandwidthabusemaxattack", FIREWALL_BANDWIDTHABUSE_MAXATTACK);
+    FIREWALL_BANTIME_BANDWIDTHABUSE = gArgs.GetArg("-firewallbantimebandwidthabuse", FIREWALL_BANTIME_BANDWIDTHABUSE);
+    FIREWALL_BANDWIDTHABUSE_MAXCHECK = gArgs.GetArg("-firewallbandwidthabusemaxcheck", FIREWALL_BANDWIDTHABUSE_MAXCHECK);
+    FIREWALL_BANDWIDTHABUSE_MINATTACK = gArgs.GetArg("-firewallbandwidthabuseminattack", FIREWALL_BANDWIDTHABUSE_MINATTACK);
+    FIREWALL_BANDWIDTHABUSE_MAXATTACK = gArgs.GetArg("-firewallbandwidthabusemaxattack", FIREWALL_BANDWIDTHABUSE_MAXATTACK);
 
     // * Firewall Settings (Invalid Wallet)
-    FIREWALL_MINIMUM_PROTOCOL = GetArg("-firewallinvalidwalletminprotocol", FIREWALL_MINIMUM_PROTOCOL);
-    FIREWALL_BANTIME_INVALIDWALLET = GetArg("-firewallbantimeinvalidwallet", FIREWALL_BANTIME_INVALIDWALLET);
-    FIREWALL_INVALIDWALLET_MAXCHECK = GetArg("-firewallinvalidwalletmaxcheck", FIREWALL_INVALIDWALLET_MAXCHECK);
+    FIREWALL_MINIMUM_PROTOCOL = gArgs.GetArg("-firewallinvalidwalletminprotocol", FIREWALL_MINIMUM_PROTOCOL);
+    FIREWALL_BANTIME_INVALIDWALLET = gArgs.GetArg("-firewallbantimeinvalidwallet", FIREWALL_BANTIME_INVALIDWALLET);
+    FIREWALL_INVALIDWALLET_MAXCHECK = gArgs.GetArg("-firewallinvalidwalletmaxcheck", FIREWALL_INVALIDWALLET_MAXCHECK);
 
     // * Firewall Settings (Forked Wallet)
-    FIREWALL_BANTIME_FORKEDWALLET = GetArg("-firewallbantimeforkedwallet", FIREWALL_BANTIME_FORKEDWALLET);
+    FIREWALL_BANTIME_FORKEDWALLET = gArgs.GetArg("-firewallbantimeforkedwallet", FIREWALL_BANTIME_FORKEDWALLET);
 
     // * Firewall Settings (Flooding Wallet)
-    FIREWALL_BANTIME_FLOODINGWALLET = GetArg("-firewallbantimefloodingwallet", FIREWALL_BANTIME_FLOODINGWALLET);
-    FIREWALL_FLOODINGWALLET_MINBYTES = GetArg("-firewallfloodingwalletminbytes", FIREWALL_FLOODINGWALLET_MINBYTES);
-    FIREWALL_FLOODINGWALLET_MAXBYTES = GetArg("-firewallfloodingwalletmaxbytes", FIREWALL_FLOODINGWALLET_MAXBYTES);
+    FIREWALL_BANTIME_FLOODINGWALLET = gArgs.GetArg("-firewallbantimefloodingwallet", FIREWALL_BANTIME_FLOODINGWALLET);
+    FIREWALL_FLOODINGWALLET_MINBYTES = gArgs.GetArg("-firewallfloodingwalletminbytes", FIREWALL_FLOODINGWALLET_MINBYTES);
+    FIREWALL_FLOODINGWALLET_MAXBYTES = gArgs.GetArg("-firewallfloodingwalletmaxbytes", FIREWALL_FLOODINGWALLET_MAXBYTES);
 
-    if (GetArg("-firewallfloodingwalletattackpattern", "-") != "-")
+    if (gArgs.GetArg("-firewallfloodingwalletattackpattern", "-") != "-")
     {
-        FIREWALL_FLOODPATTERNS[CountStringArray(FIREWALL_FLOODPATTERNS)] = GetArg("-firewallfloodingwalletattackpattern", "");
+        FIREWALL_FLOODPATTERNS[CountStringArray(FIREWALL_FLOODPATTERNS)] = gArgs.GetArg("-firewallfloodingwalletattackpattern", "");
     }
 
-    FIREWALL_FLOODINGWALLET_MINTRAFFICAVERAGE = GetArg("-firewallfloodingwalletmintrafficavg", FIREWALL_FLOODINGWALLET_MINTRAFFICAVERAGE);
-    FIREWALL_FLOODINGWALLET_MAXTRAFFICAVERAGE = GetArg("-firewallfloodingwalletmaxtrafficavg", FIREWALL_FLOODINGWALLET_MAXTRAFFICAVERAGE);
-    FIREWALL_FLOODINGWALLET_MINCHECK = GetArg("-firewallfloodingwalletmincheck", FIREWALL_FLOODINGWALLET_MINCHECK);
-    FIREWALL_FLOODINGWALLET_MAXCHECK = GetArg("-firewallfloodingwalletmaxcheck", FIREWALL_FLOODINGWALLET_MAXCHECK);
+    FIREWALL_FLOODINGWALLET_MINTRAFFICAVERAGE = gArgs.GetArg("-firewallfloodingwalletmintrafficavg", FIREWALL_FLOODINGWALLET_MINTRAFFICAVERAGE);
+    FIREWALL_FLOODINGWALLET_MAXTRAFFICAVERAGE = gArgs.GetArg("-firewallfloodingwalletmaxtrafficavg", FIREWALL_FLOODINGWALLET_MAXTRAFFICAVERAGE);
+    FIREWALL_FLOODINGWALLET_MINCHECK = gArgs.GetArg("-firewallfloodingwalletmincheck", FIREWALL_FLOODINGWALLET_MINCHECK);
+    FIREWALL_FLOODINGWALLET_MAXCHECK = gArgs.GetArg("-firewallfloodingwalletmaxcheck", FIREWALL_FLOODINGWALLET_MAXCHECK);
 
-return;
+    return;
 }
 
 
@@ -254,28 +254,29 @@ return;
 bool ForceDisconnectNode(CNode *pnode, string FromFunction)
 {
     TRY_LOCK(pnode->cs_vSend, lockSend);
-        if (lockSend){
-
-            // release outbound grant (if any)
-            pnode->CloseSocketDisconnect();
-            LogPrint("net", "%s (%s) Panic Disconnect: %s\n", ModuleName.c_str(), FromFunction, pnode->addrName.c_str());
-
-            if (FIREWALL_LIVE_DEBUG == true)
-            {
-                if (FIREWALL_LIVEDEBUG_DISCONNECT == true)
-                {
-                    cout << ModuleName << "Panic Disconnect: " << pnode->addrName << "]\n" << endl;
-                }
-            }
-
-return true;  
-        }
-        else
+    if (lockSend)
+    {
+        if (FIREWALL_LIVE_DEBUG == true)
         {
-            pnode->vSendMsg.end();
+            if (FIREWALL_LIVEDEBUG_DISCONNECT == true)
+            {
+                cout << ModuleName << "-" << FromFunction << " Panic Disconnect: " << pnode->addr.ToString() << " Masternode: " << pnode->fMasternode << "]\n" << endl;
+            }
         }
 
-return false;
+        LogPrintf("%s -%s- Panic Disconnect: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
+            ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode);
+        
+        // Trigger Disconnection using CConnman::ThreadSocketHandler()
+        pnode->fDisconnect = true;
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
 }
 
 
@@ -290,35 +291,21 @@ bool CheckBlackList(CNode *pnode)
     {
         for (i = 0; i < TmpBlackListCount; i++)
         {  
-            if (pnode->addrName == FIREWALL_BLACKLIST[i])
+            if (pnode->addr.ToString() == FIREWALL_BLACKLIST[i])
             {   
-// Banned IP FOUND!
-return true;
+                // Banned IP FOUND!
+                return true;
             }
         }
     }
 
-// Banned IP not found
-return false;
-}
-
-
-// * Function:  *
-bool CheckBanned(CNode *pnode)
-{
-    if (CNode::IsBanned(pnode->addr) == true)
-    {
-// Yes Banned!
-return true;
-    }
-
-// No Banned!
-return false;
+    // Banned IP not found
+    return false;
 }
 
 
 // * Function: AddToBlackList *
-bool AddToBlackList(CNode *pnode)
+bool AddToBlackList(CNode *pnode, string FromFunction)
 {
     int TmpBlackListCount;
     TmpBlackListCount = CountStringArray(FIREWALL_BLACKLIST);
@@ -334,43 +321,58 @@ bool AddToBlackList(CNode *pnode)
             // increase Blacklist count
             TmpBlackListCount = TmpBlackListCount + 1;
             // Add node IP to blacklist
-            FIREWALL_BLACKLIST[TmpBlackListCount] = pnode->addrName;
+            FIREWALL_BLACKLIST[TmpBlackListCount] = pnode->addr.ToString();
 
             if (FIREWALL_LIVE_DEBUG == true)
             {
                 if (FIREWALL_LIVEDEBUG_BLACKLIST == true)
                 {
-                    cout << ModuleName << "Blacklisted: " << pnode->addrName << "]\n" << endl;
+                    cout << ModuleName << "-" << FromFunction << " Blacklisted: " << pnode->addr.ToString() << " Masternode: " << pnode->fMasternode << "]\n" << endl;
                 }
             }
 
             // Append Blacklist to debug.log
-            LogPrint("net", "%s Blacklisted: %s\n", ModuleName.c_str(), pnode->addrName.c_str());
+            LogPrintf("%s -%s- Blacklisted: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
+                ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode);
 
-return true;
+            return true;
         }
 
-return false;
+    return false;
+}
+
+
+// * Function:  *
+bool CheckBanned(CNode *pnode)
+{
+    if (g_connman->IsBanned((CNetAddr)pnode->addr) == true)
+    {
+        // Yes Banned!
+        return true;
+    }
+
+    // No Banned!
+    return false;
 }
 
 
 // * Function: AddToBanList *
-bool AddToBanList(CNode *pnode, BanReason BAN_REASON, int BAN_TIME)
+bool AddToBanList(CNode *pnode, BanReason BAN_REASON, int BAN_TIME, string FromFunction)
 {
-    CNode::Ban(pnode->addr);
-    //DumpBanlist();
+    g_connman->Ban((CNetAddr)pnode->addr, BAN_REASON, BAN_TIME, false);
 
-    LogPrint("net", "%s Banned: %s\n", ModuleName.c_str(), pnode->addrName);
+    LogPrintf("%s -%s- Banned: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
+        ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode);
 
     if (FIREWALL_LIVE_DEBUG == true)
     {
         if (FIREWALL_LIVEDEBUG_BANS == true)
         {
-            cout << ModuleName << "Banned: " << pnode->addrName << "]\n" << endl;
+            cout << ModuleName << "-" << FromFunction << " Banned: " << pnode->addr.ToString() << " Masternode: " << pnode->fMasternode << "]\n" << endl;
         }
     }
 
-return true;
+    return true;
 }
 
 
@@ -378,15 +380,13 @@ return true;
 // Artificially Intelligent Attack Detection & Mitigation
 bool CheckAttack(CNode *pnode, string FromFunction)
 {
-    bool DETECTED_ATTACK = false;
-    BanReason BAN_REASON;
-    
+    bool DETECTED_ATTACK = false;    
     bool BLACKLIST_ATTACK = false;
 
     int BAN_TIME = 0; // Default 24 hours
     bool BAN_ATTACK = false;
 
-    //BanReason BAN_REASON;
+    BanReason BAN_REASON;
 
     string ATTACK_CHECK_NAME;
     string ATTACK_CHECK_LOG;
@@ -417,8 +417,8 @@ bool CheckAttack(CNode *pnode, string FromFunction)
         ATTACK_CHECK_NAME = "Bandwidth Abuse";
 
         // ### Attack Detection ###
-        // Calculate the ratio between Recieved bytes and Sent Bytes
-        // Detect a valid syncronizaion vs. a flood attack
+        // Calculate the ratio between Received bytes and Sent Bytes
+        // Detect a valid syncronization vs. a flood attack
         
         if (nTimeConnected > FIREWALL_BANDWIDTHABUSE_MAXCHECK)
         {
@@ -428,14 +428,14 @@ bool CheckAttack(CNode *pnode, string FromFunction)
             {
                 if (pnode->nTrafficAverage < Firewall_AverageTraffic_Min)
                 {
-                    // too low bandiwidth ratio limits
+                    // too low bandwidth ratio limits
                     DETECTED_ATTACK = true;
                     ATTACK_TYPE = "2-LowBW-HighHeight";
                 }
 
                 if (pnode->nTrafficAverage > Firewall_AverageTraffic_Max)
                 {
-                    // too high bandiwidth ratio limits
+                    // too high bandwidth ratio limits
                     DETECTED_ATTACK = true;
                     ATTACK_TYPE = "2-HighBW-HighHeight";
                 }
@@ -447,7 +447,7 @@ bool CheckAttack(CNode *pnode, string FromFunction)
             {  
                 if (pnode->nTrafficAverage < Firewall_AverageTraffic_Min)
                 {
-                    // too low bandiwidth ratio limits
+                    // too low bandwidth ratio limits
                     DETECTED_ATTACK = true;
                     ATTACK_TYPE = "3-LowBW-LowHeight";
                 }
@@ -455,7 +455,7 @@ bool CheckAttack(CNode *pnode, string FromFunction)
                 if (pnode->nTrafficAverage > Firewall_AverageTraffic_Max)
                 {
 
-                    // too high bandiwidth ratio limits
+                    // too high bandwidth ratio limits
                     DETECTED_ATTACK = true;
                     ATTACK_TYPE = "3-HighBW-LowHeight";
                 }
@@ -479,7 +479,7 @@ bool CheckAttack(CNode *pnode, string FromFunction)
             {
                 BAN_ATTACK = true;
                 BAN_TIME = FIREWALL_BANTIME_BANDWIDTHABUSE;
-                //BAN_REASON = BanReasonBandwidthAbuse;
+                BAN_REASON = BanReasonBandwidthAbuse;
             }
 
         }
@@ -637,7 +637,7 @@ bool CheckAttack(CNode *pnode, string FromFunction)
             {
                 BAN_ATTACK = true;
                 BAN_TIME = FIREWALL_BANTIME_INVALIDWALLET;
-                //BAN_REASON = BanReasonInvalidWallet;
+                BAN_REASON = BanReasonInvalidWallet;
             }
         }
         // ##########################
@@ -697,7 +697,7 @@ bool CheckAttack(CNode *pnode, string FromFunction)
                 BAN_ATTACK = true;
 
                 BAN_TIME = FIREWALL_BANTIME_FORKEDWALLET;
-                //BAN_REASON = BanReasonForkedWallet;
+                BAN_REASON = BanReasonForkedWallet;
             }
         }
         // #######################
@@ -912,7 +912,7 @@ bool CheckAttack(CNode *pnode, string FromFunction)
             {
                 BAN_ATTACK = true;
                 BAN_TIME = FIREWALL_BANTIME_FLOODINGWALLET;
-                //BAN_REASON = BanReasonFloodingWallet;
+                BAN_REASON = BanReasonFloodingWallet;
             }
 
         }
@@ -946,7 +946,7 @@ bool CheckAttack(CNode *pnode, string FromFunction)
 
         if (FIREWALL_LIVE_DEBUG == true)
         {
-            cout << ModuleName << " [Checking: " << pnode->addrName << "] [Attacks: " << ATTACK_CHECK_LOG << "]\n" << endl;
+            cout << ModuleName << "-" << FromFunction << " [Checking: " << pnode->addr.ToString() << "] [Masternode: " << pnode->fMasternode << "] [Attacks: " << ATTACK_CHECK_LOG << "\n" << endl;
         }
 
     // ----------------
@@ -955,36 +955,38 @@ bool CheckAttack(CNode *pnode, string FromFunction)
     {
         if (FIREWALL_LIVE_DEBUG == true)
         {
-            cout << ModuleName << " [Attack Type: " << ATTACK_TYPE << "] [Detected from: " << pnode->addrName << "] [Node Traffic: " << pnode->nTrafficRatio << "] [Node Traffic Avrg: " << pnode->nTrafficAverage << "] [Traffic Avrg: " << Firewall_AverageTraffic << "] [Sent Bytes: " << pnode->nSendBytes << "] [Recv Bytes: " << pnode->nRecvBytes << "] [Sync Height: " << pnode->nSyncHeight << "] [Protocol: " << pnode->nRecvVersion <<"\n" << endl;
+            cout << ModuleName << "-" << FromFunction << " [Attack Type: " << ATTACK_TYPE << " [Detected from: " << pnode->addr.ToString() << "] [Masternode: " << pnode->fMasternode << "] [Node Traffic: " << pnode->nTrafficRatio << "] [Node Traffic Avrg: " << pnode->nTrafficAverage << "] [Traffic Avrg: " << Firewall_AverageTraffic << "] [Sent Bytes: " << pnode->nSendBytes << "] [Recv Bytes: " << pnode->nRecvBytes << "] [Sync Height: " << pnode->nSyncHeight << "] [Protocol: " << pnode->nRecvVersion << "\n" << endl;
         }
 
-        LogPrint("net", "%s [Attack Type: %s] [Detected from: %s] [Node Traffic: %d] [Node Traffic Avrg: %d] [Traffic Avrg: %d] [Sent Bytes: %d] [Recv Bytes: %d] [Sync Height: %i] [Protocol: %i\n", ModuleName.c_str(), ATTACK_TYPE.c_str(), pnode->addrName.c_str(), pnode->nTrafficRatio, pnode->nTrafficAverage, Firewall_AverageTraffic, pnode->nSendBytes, pnode->nRecvBytes, pnode->nSyncHeight, pnode->nRecvVersion);
+        LogPrintf("%s -%s- Attack Detected: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d AttackType=%s NodeTraffic=%d NodeTrafficAverage=%d TrafficAverage=%d SendBytes=%d RecvBytes=%d SyncHeight=%i Protocol=%i\n",
+            ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode,
+            ATTACK_TYPE.c_str(), pnode->nTrafficRatio, pnode->nTrafficAverage, Firewall_AverageTraffic, pnode->nSendBytes, pnode->nRecvBytes, pnode->nSyncHeight, pnode->nRecvVersion
+        );
+
 
         // Blacklist IP on Attack detection
         // * add node/peer IP to blacklist
         if (BLACKLIST_ATTACK == true)
         {
-            AddToBlackList(pnode);
+            AddToBlackList(pnode, FromFunction);
         }
 
         // Peer/Node Ban if required
         if (BAN_ATTACK == true)
         {
-            AddToBanList(pnode, BAN_REASON, BAN_TIME);
+            AddToBanList(pnode, BAN_REASON, BAN_TIME, FromFunction);
         }
 
         // Peer/Node Panic Disconnect
         ForceDisconnectNode(pnode, FromFunction);
 
-// ATTACK DETECTED!
-return true;
-
+        // ATTACK DETECTED!
+        return true;
     }
     else
     {
-
-//NO ATTACK DETECTED...
-return false;
+        //NO ATTACK DETECTED...
+        return false;
     }
     // ----------------
 }
@@ -1044,19 +1046,26 @@ void Examination(CNode *pnode, string FromFunction)
             Firewall_AverageTraffic = Firewall_AverageTraffic / (double)2;
             Firewall_AverageTraffic = Firewall_AverageTraffic - (double)FIREWALL_TRAFFIC_TOLERANCE;      // reduce with tolerance
             Firewall_AverageTraffic_Min = Firewall_AverageTraffic - (double)FIREWALL_TRAFFIC_ZONE;
-            Firewall_AverageTraffic_Max = Firewall_AverageTraffic + (double)FIREWALL_TRAFFIC_ZONE;    
-            Firewall_AverageSend = Firewall_AverageSend + pnode->nSendBytes / vNodes.size();
-            Firewall_AverageRecv = Firewall_AverageRecv + pnode->nRecvBytes / vNodes.size();        
+            Firewall_AverageTraffic_Max = Firewall_AverageTraffic + (double)FIREWALL_TRAFFIC_ZONE;
+
+            int Connections = (int)g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL);
+
+            int CurrentAverageSend = 0;
+            int CurrentAverageRecv = 0;
+            
+            if (Connections > 0)
+            {
+                CurrentAverageSend = CurrentAverageSend + pnode->nSendBytes / Connections;
+                CurrentAverageRecv = CurrentAverageRecv + pnode->nRecvBytes / Connections;
+            }
 
             if (FIREWALL_LIVE_DEBUG == true)
             {
                 if (FIREWALL_LIVEDEBUG_EXAM == true)
                 {
-                    cout << ModuleName << " [BlackListed Nodes/Peers: " << CountStringArray(FIREWALL_BLACKLIST) << "] [Traffic: " << Firewall_AverageTraffic << "] [Traffic Min: " << Firewall_AverageTraffic_Min << "] [Traffic Max: " << Firewall_AverageTraffic_Max << "]" << " [Safe Height: " << Firewall_AverageHeight << "] [Height Min: " << Firewall_AverageHeight_Min << "] [Height Max: " << Firewall_AverageHeight_Max <<"] [Send Avrg: " << Firewall_AverageSend<< "] [Rec Avrg: " << Firewall_AverageRecv << "]\n" <<endl;
-
-                    cout << ModuleName << "[Check Node IP: " << pnode->addrName.c_str() << "] [Traffic: " << pnode->nTrafficRatio << "] [Traffic Average: " << pnode->nTrafficAverage << "] [Starting Height: " << pnode->nStartingHeight << "] [Sync Height: " << NodeHeight << "] [Node Sent: " << pnode->nSendBytes << "] [Node Recv: " << pnode->nRecvBytes << "] [Protocol: " << pnode->nRecvVersion << "]\n" << endl;
+                    cout << ModuleName << "-" << " [BlackListed Nodes/Peers: " << CountStringArray(FIREWALL_BLACKLIST) << "] [Traffic: " << Firewall_AverageTraffic << "] [Traffic Min: " << Firewall_AverageTraffic_Min << "] [Traffic Max: " << Firewall_AverageTraffic_Max << "]" << " [Safe Height: " << Firewall_AverageHeight << "] [Height Min: " << Firewall_AverageHeight_Min << "] [Height Max: " << Firewall_AverageHeight_Max <<"] [Send Avrg: " << Firewall_AverageSend<< "] [Rec Avrg: " << Firewall_AverageRecv << "]\n" <<endl;
+                    cout << ModuleName << "-" << FromFunction << " [Check Node: " << pnode->addr.ToString() << " ] [Masternode: " << pnode->fMasternode << "] [Node Traffic: " << pnode->nTrafficRatio << "] [Node Traffic Avrg: " << pnode->nTrafficAverage << "] [Traffic Avrg: " << Firewall_AverageTraffic << "] [Sent Bytes: " << pnode->nSendBytes << "] [Recv Bytes: " << pnode->nRecvBytes << "] [Sync Height: " << pnode->nSyncHeight << "] [Protocol: " << pnode->nRecvVersion << "\n" << endl;
                 }
-
             }
 
         }
@@ -1090,7 +1099,7 @@ bool FireWall(CNode *pnode, string FromFunction)
         for (i = 0; i < TmpWhiteListCount; i++)
         {  
             // Check for Static Whitelisted Seed Node
-            if (pnode->addrName == FIREWALL_WHITELIST[i])
+            if (pnode->addr.ToString() == FIREWALL_WHITELIST[i])
             {
                 return false;
             }
@@ -1105,13 +1114,18 @@ bool FireWall(CNode *pnode, string FromFunction)
 
     if (FIREWALL_CLEAR_BANS == true)
     {
-        if (FIREWALL_CLEARBANS_MINNODES <= vNodes.size())
+
+        if (FIREWALL_CLEARBANS_MINNODES <= (int)g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL))
         {
-            pnode->ClearBanned();
+            
+            g_connman->ClearBanned();
+
             int TmpBlackListCount;
             TmpBlackListCount = CountStringArray(FIREWALL_BLACKLIST);
             std::fill_n(FIREWALL_BLACKLIST, TmpBlackListCount, 0);
-            LogPrint("net", "%s Cleared ban: %s\n", ModuleName.c_str(), pnode->addrName.c_str());
+                LogPrintf("%s -%s- Cleared Ban: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
+                    ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode
+                );
         }
     }
 
@@ -1119,7 +1133,9 @@ bool FireWall(CNode *pnode, string FromFunction)
     {
         FromFunction = "CheckBlackList";
 
-        LogPrint("net", "%s Disconnected Blacklisted IP: %s\n", ModuleName.c_str(), pnode->addrName.c_str());
+        LogPrintf("%s -%s- Node/Peer Already Blacklisted: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
+            ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode
+        );
 
         // Peer/Node Panic Disconnect
         ForceDisconnectNode(pnode, FromFunction);
@@ -1131,7 +1147,9 @@ bool FireWall(CNode *pnode, string FromFunction)
     {
         FromFunction = "CheckBanned";
 
-        LogPrint("net", "%s Disconnected Banned IP: %s\n", ModuleName.c_str(), pnode->addrName.c_str());
+        LogPrintf("%s -%s- Node/Peer Already Banned: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
+            ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode
+        );
 
         // Peer/Node Panic Disconnect
         ForceDisconnectNode(pnode, FromFunction);
@@ -1142,6 +1160,6 @@ bool FireWall(CNode *pnode, string FromFunction)
     // Perform a Node consensus examination
     Examination(pnode, FromFunction);
 
-// Peer/Node Safe    
-return false;
+    // Peer/Node Safe    
+    return false;
 }

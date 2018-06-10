@@ -5,6 +5,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "addrman.h"
+#include "addrdb.h"
 #include <string>
 
 #ifdef WIN32

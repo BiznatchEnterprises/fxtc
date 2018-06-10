@@ -24,7 +24,7 @@
 
 #include <univalue.h>
 
-extern int CountStringArray(string *ArrayName);
+extern int CountStringArray(std::string *ArrayName);
 extern int CountIntArray(int *ArrayName);
 
 inline const char * const BoolToString(bool b)
@@ -657,7 +657,7 @@ void RegisterNetRPCCommands(CRPCTable &t)
 }
 
 
-
+/*
 Value firewallstatus(const Array& params, bool fHelp)
 {
     string strCommand = "true";
@@ -2327,3 +2327,4 @@ Value firewallfloodingwalletmaxcheck(const Array& params, bool fHelp)
 
 return result;
 }
+*/

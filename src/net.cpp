@@ -2100,7 +2100,7 @@ void CConnman::OpenNetworkConnection(const CAddress& addrConnect, bool fCountFai
 
     if (!pnode)
     {
-        return false;
+        return;
     }
 
     if (grantOutbound)

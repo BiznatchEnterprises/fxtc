@@ -20,7 +20,12 @@ typedef enum BanReason
 {
     BanReasonUnknown          = 0,
     BanReasonNodeMisbehaving  = 1,
-    BanReasonManuallyAdded    = 2
+    BanReasonManuallyAdded    = 2,
+    BanReasonBandwidthAbuse   = 3,
+    BanReasonInvalidWallet    = 4,
+    BanReasonForkedWallet     = 5,
+    BanReasonFloodingWallet   = 6
+    
 } BanReason;
 
 class CBanEntry
