@@ -657,18 +657,17 @@ void RegisterNetRPCCommands(CRPCTable &t)
 }
 
 
-/*
 UniValue firewallstatus(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() != 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallstatus \"\n"
                             "\nGet the status of Bitcoin Firewall.\n"
                             );
 
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("enabled", BoolToString(FIREWALL_ENABLED)));
     result.push_back(Pair("clear-blacklist", BoolToString(FIREWALL_CLEAR_BLACKLIST)));
     result.push_back(Pair("clear-banlist", BoolToString(FIREWALL_CLEAR_BANS)));
@@ -706,9 +705,9 @@ UniValue firewallstatus(const JSONRPCRequest& request)
 
 UniValue firewallenabled(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallenabled \"true|false\"\n"
                             "\nChange the status of Bitcoin Firewall.\n"
                             "\nArguments:\n"
@@ -719,7 +718,7 @@ UniValue firewallenabled(const JSONRPCRequest& request)
                             + HelpExampleCli("firewallenabled", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
         strCommand = request.params[0].get_str();
     }
@@ -733,7 +732,7 @@ UniValue firewallenabled(const JSONRPCRequest& request)
         FIREWALL_ENABLED = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("enabled", strCommand));
 
     return result;
@@ -742,9 +741,9 @@ UniValue firewallenabled(const JSONRPCRequest& request)
 
 UniValue firewallclearblacklist(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
-    if (request.request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+    std::string strCommand = "true";
+    if (request.fHelp || request.params.size() == 0)
+        throw std::runtime_error(
                             "firewallclearblacklist \"true|false\"\n"
                             "\nBitcoin Firewall Clear Blacklist (session)\n"
                             "\nArguments:\n"
@@ -769,7 +768,7 @@ UniValue firewallclearblacklist(const JSONRPCRequest& request)
         FIREWALL_CLEAR_BLACKLIST = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("clear-blacklist", strCommand));
 
     return result;
@@ -778,9 +777,9 @@ UniValue firewallclearblacklist(const JSONRPCRequest& request)
 
 UniValue firewallclearbanlist(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallclearbanlist \"true|false\"\n"
                             "\nBitcoin Firewall Clear Ban List (permenant)\n"
                             "\nArguments:\n"
@@ -791,7 +790,7 @@ UniValue firewallclearbanlist(const JSONRPCRequest& request)
                             + HelpExampleCli("firewallclearbanlist", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
         strCommand = request.params[0].get_str();
     }
@@ -805,7 +804,7 @@ UniValue firewallclearbanlist(const JSONRPCRequest& request)
         FIREWALL_CLEAR_BANS = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("clear-banlist", strCommand));
 
     return result;
@@ -814,9 +813,9 @@ UniValue firewallclearbanlist(const JSONRPCRequest& request)
 
 UniValue firewalldebug(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalldebug \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output\n"
                             "\nArguments:\n"
@@ -841,7 +840,7 @@ UniValue firewalldebug(const JSONRPCRequest& request)
         FIREWALL_LIVE_DEBUG = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("live-debug", strCommand));
 
     return result;
@@ -849,9 +848,9 @@ UniValue firewalldebug(const JSONRPCRequest& request)
 
 UniValue firewalldebugexam(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalldebugexam \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Exam\n"
                             "\nArguments:\n"
@@ -876,7 +875,7 @@ UniValue firewalldebugexam(const JSONRPCRequest& request)
         FIREWALL_LIVEDEBUG_EXAM = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("live-debug-exam", strCommand));
 
     return result;
@@ -885,9 +884,9 @@ UniValue firewalldebugexam(const JSONRPCRequest& request)
 
 UniValue firewalldebugbans(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalldebugbans \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Bans\n"
                             "\nArguments:\n"
@@ -912,7 +911,7 @@ UniValue firewalldebugbans(const JSONRPCRequest& request)
         FIREWALL_LIVEDEBUG_BANS = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("live-debug-bans", strCommand));
 
     return result;
@@ -920,9 +919,9 @@ UniValue firewalldebugbans(const JSONRPCRequest& request)
 
 UniValue firewalldebugblacklist(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalldebugblacklist \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Blacklist\n"
                             "\nArguments:\n"
@@ -947,7 +946,7 @@ UniValue firewalldebugblacklist(const JSONRPCRequest& request)
         FIREWALL_LIVEDEBUG_BLACKLIST = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("live-debug-blacklist", strCommand));
 
     return result;
@@ -956,9 +955,9 @@ UniValue firewalldebugblacklist(const JSONRPCRequest& request)
 
 UniValue firewalldebugdisconnect(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalldebugdisconnect \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Disconnect\n"
                             "\nArguments:\n"
@@ -983,7 +982,7 @@ UniValue firewalldebugdisconnect(const JSONRPCRequest& request)
         FIREWALL_LIVEDEBUG_DISCONNECT = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("live-debug-disconnect", strCommand));
 
     return result;
@@ -992,9 +991,9 @@ UniValue firewalldebugdisconnect(const JSONRPCRequest& request)
 
 UniValue firewalldebugbandwidthabuse(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalldebugbandwidthabuse \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Bandwidth Abuse\n"
                             "\nArguments:\n"
@@ -1019,7 +1018,7 @@ UniValue firewalldebugbandwidthabuse(const JSONRPCRequest& request)
         FIREWALL_LIVEDEBUG_BANDWIDTHABUSE = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("live-debug-bandwidthabuse", strCommand));
 
     return result;
@@ -1028,9 +1027,9 @@ UniValue firewalldebugbandwidthabuse(const JSONRPCRequest& request)
 
 UniValue firewalldebugnofalsepositivebandwidthabuse(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalldebugnofalsepositivebandwidthabuse \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - No False Positive (Bandwidth Abuse)\n"
                             "\nArguments:\n"
@@ -1055,7 +1054,7 @@ UniValue firewalldebugnofalsepositivebandwidthabuse(const JSONRPCRequest& reques
         FIREWALL_LIVEDEBUG_NOFALSEPOSITIVE = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("live-debug-nofalsepositive", strCommand));
 
     return result;
@@ -1064,9 +1063,9 @@ UniValue firewalldebugnofalsepositivebandwidthabuse(const JSONRPCRequest& reques
 
 UniValue firewalldebuginvalidwallet(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalldebuginvalidwallet \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Invalid Wallet\n"
                             "\nArguments:\n"
@@ -1091,7 +1090,7 @@ UniValue firewalldebuginvalidwallet(const JSONRPCRequest& request)
         FIREWALL_LIVEDEBUG_INVALIDWALLET = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("live-debug-invalidwallet", strCommand));
 
     return result;
@@ -1100,9 +1099,9 @@ UniValue firewalldebuginvalidwallet(const JSONRPCRequest& request)
 
 UniValue firewalldebugforkedwallet(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalldebugforkedwallet \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Forked Wallet\n"
                             "\nArguments:\n"
@@ -1127,7 +1126,7 @@ UniValue firewalldebugforkedwallet(const JSONRPCRequest& request)
         FIREWALL_LIVEDEBUG_FORKEDWALLET = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("live-debug-forkedwallet", strCommand));
 
     return result;
@@ -1136,9 +1135,9 @@ UniValue firewalldebugforkedwallet(const JSONRPCRequest& request)
 
 UniValue firewalldebugfloodingwallet(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalldebugfloodingwallet \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Flooding Wallet\n"
                             "\nArguments:\n"
@@ -1162,7 +1161,7 @@ UniValue firewalldebugfloodingwallet(const JSONRPCRequest& request)
         FIREWALL_LIVEDEBUG_FLOODINGWALLET = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("live-debug-floodingwallet", strCommand));
 
     return result;
@@ -1172,7 +1171,7 @@ UniValue firewalldebugfloodingwallet(const JSONRPCRequest& request)
 UniValue firewallaveragetolerance(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallaveragetolerance \"tolerance\"\n"
                             "\nBitcoin Firewall Exam Setting (Average Block Tolerance)\n"
                             "\nArguments:\n"
@@ -1187,7 +1186,7 @@ UniValue firewallaveragetolerance(const JSONRPCRequest& request)
         FIREWALL_AVERAGE_TOLERANCE = strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("exam-average-tolerance", FIREWALL_AVERAGE_TOLERANCE));
 
     return result;
@@ -1197,7 +1196,7 @@ UniValue firewallaveragetolerance(const JSONRPCRequest& request)
 UniValue firewallaveragerange(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallaveragerange \"zone\"\n"
                             "\nBitcoin Firewall Exam Setting (Average Block Range)\n"
                             "\nArguments:\n"
@@ -1212,7 +1211,7 @@ UniValue firewallaveragerange(const JSONRPCRequest& request)
         FIREWALL_AVERAGE_RANGE = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("exam-average-range", FIREWALL_AVERAGE_RANGE));
 
     return result;
@@ -1222,7 +1221,7 @@ UniValue firewallaveragerange(const JSONRPCRequest& request)
 UniValue firewalltraffictolerance(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalltraffictolerance \"tolerance\"\n"
                             "\nBitcoin Firewall Exam Setting (Traffic Tolerance)\n"
                             "\nArguments:\n"
@@ -1237,7 +1236,7 @@ UniValue firewalltraffictolerance(const JSONRPCRequest& request)
         FIREWALL_TRAFFIC_TOLERANCE = strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("exam-traffic-tolerance", FIREWALL_TRAFFIC_TOLERANCE));
 
     return result;
@@ -1247,7 +1246,7 @@ UniValue firewalltraffictolerance(const JSONRPCRequest& request)
 UniValue firewalltrafficzone(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalltrafficzone \"zone\"\n"
                             "\nBitcoin Firewall Exam Setting (Traffic Zone)\n"
                             "\nArguments:\n"
@@ -1262,7 +1261,7 @@ UniValue firewalltrafficzone(const JSONRPCRequest& request)
         FIREWALL_TRAFFIC_ZONE = strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("exam-traffic-zone", FIREWALL_TRAFFIC_ZONE));
 
     return result;
@@ -1271,10 +1270,10 @@ UniValue firewalltrafficzone(const JSONRPCRequest& request)
 
 UniValue firewalladdtowhitelist(const JSONRPCRequest& request)
 {
-    string MSG;
+    std::string MSG;
 
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalladdtowhitelist \"address\"\n"
                             "\nBitcoin Firewall Adds IP Address to General Rule\n"
                             "\nArguments:\n"
@@ -1289,7 +1288,7 @@ UniValue firewalladdtowhitelist(const JSONRPCRequest& request)
     {
         if (CountStringArray(FIREWALL_WHITELIST) < 256)
         {
-            FIREWALL_WHITELIST[CountStringArray(FIREWALL_WHITELIST)] = params[0].get_str();
+            FIREWALL_WHITELIST[CountStringArray(FIREWALL_WHITELIST)] = request.params[0].get_str();
             MSG = CountStringArray(FIREWALL_WHITELIST);
         }
         else
@@ -1298,7 +1297,7 @@ UniValue firewalladdtowhitelist(const JSONRPCRequest& request)
         }
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("exam-whitelist-add", MSG));
 
     return result;
@@ -1307,10 +1306,10 @@ UniValue firewalladdtowhitelist(const JSONRPCRequest& request)
 
 UniValue firewalladdtoblacklist(const JSONRPCRequest& request)
 {
-    string MSG;
+    std::string MSG;
 
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalladdtoblacklist \"address\"\n"
                             "\nBitcoin Firewall Adds IP Address to General Rule\n"
                             "\nArguments:\n"
@@ -1334,7 +1333,7 @@ UniValue firewalladdtoblacklist(const JSONRPCRequest& request)
         }
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("exam-blacklist-add", MSG));
 
     return result;
@@ -1343,9 +1342,9 @@ UniValue firewalladdtoblacklist(const JSONRPCRequest& request)
 
 UniValue firewalldetectbandwidthabuse(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalldetectbandwidthabuse \"true|false\"\n"
                             "\nBitcoin Firewall Detect Bandwidth Abuse Rule #1\n"
                             "\nArguments:\n"
@@ -1357,7 +1356,7 @@ UniValue firewalldetectbandwidthabuse(const JSONRPCRequest& request)
 
     if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1369,7 +1368,7 @@ UniValue firewalldetectbandwidthabuse(const JSONRPCRequest& request)
         FIREWALL_DETECT_BANDWIDTHABUSE = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("detect-bandwidthabuse", strCommand));
 
     return result;
@@ -1378,9 +1377,9 @@ UniValue firewalldetectbandwidthabuse(const JSONRPCRequest& request)
 
 UniValue firewallblacklistbandwidthabuse(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallblacklistbandwidthabuse \"true|false\"\n"
                             "\nBitcoin Firewall Blacklist Bandwidth Abuse Rule #1 (session)\n"
                             "\nArguments:\n"
@@ -1404,7 +1403,7 @@ UniValue firewallblacklistbandwidthabuse(const JSONRPCRequest& request)
         FIREWALL_BLACKLIST_BANDWIDTHABUSE = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("blacklist-bandwidthabuse", strCommand));
 
     return result;
@@ -1413,9 +1412,9 @@ UniValue firewallblacklistbandwidthabuse(const JSONRPCRequest& request)
 
 UniValue firewallbanbandwidthabuse(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallbanbandwidthabuse \"true|false\"\n"
                             "\nBitcoin Firewall Ban Bandwidth Abuse Rule #1 (permenant)\n"
                             "\nArguments:\n"
@@ -1439,7 +1438,7 @@ UniValue firewallbanbandwidthabuse(const JSONRPCRequest& request)
         FIREWALL_BAN_BANDWIDTHABUSE = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("ban-bandwidthabuse", strCommand));
 
     return result;
@@ -1448,9 +1447,9 @@ UniValue firewallbanbandwidthabuse(const JSONRPCRequest& request)
 
 UniValue firewallnofalsepositivebandwidthabuse(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallnofalsepositivebandwidthabuse \"true|false\"\n"
                             "\nBitcoin Firewall False Positive Protection Rule #1\n"
                             "\nArguments:\n"
@@ -1474,7 +1473,7 @@ UniValue firewallnofalsepositivebandwidthabuse(const JSONRPCRequest& request)
         FIREWALL_NOFALSEPOSITIVE_BANDWIDTHABUSE = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("firewallnofalsepositivebandwidthabuse", strCommand));
 
     return result;
@@ -1484,7 +1483,7 @@ UniValue firewallnofalsepositivebandwidthabuse(const JSONRPCRequest& request)
 UniValue firewallbantimebandwidthabuse(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallbantimebandwidthabuse \"seconds\"\n"
                             "\nBitcoin Firewall Ban Time Bandwidth Abuse Rule #1\n"
                             "\nArguments:\n"
@@ -1500,7 +1499,7 @@ UniValue firewallbantimebandwidthabuse(const JSONRPCRequest& request)
         FIREWALL_BANTIME_BANDWIDTHABUSE = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("bantime-bandwidthabuse", FIREWALL_BANTIME_BANDWIDTHABUSE));
 
     return result;
@@ -1510,7 +1509,7 @@ UniValue firewallbantimebandwidthabuse(const JSONRPCRequest& request)
 UniValue firewallbandwidthabusemaxcheck(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallbandwidthabusemaxcheck \"seconds\"\n"
                             "\nBitcoin Firewall Max Check Bandwidth Abuse Rule #1\n"
                             "\nArguments:\n"
@@ -1526,7 +1525,7 @@ UniValue firewallbandwidthabusemaxcheck(const JSONRPCRequest& request)
         FIREWALL_BANDWIDTHABUSE_MAXCHECK = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("maxcheck-bandwidthabuse", FIREWALL_BANDWIDTHABUSE_MAXCHECK));
 
     return result;
@@ -1535,7 +1534,7 @@ UniValue firewallbandwidthabusemaxcheck(const JSONRPCRequest& request)
 UniValue firewallbandwidthabuseminattack(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallbandwidthabuseminattack \"value\"\n"
                             "\nBitcoin Firewall Min Attack Bandwidth Abuse Rule #1\n"
                             "\nArguments:\n"
@@ -1551,7 +1550,7 @@ UniValue firewallbandwidthabuseminattack(const JSONRPCRequest& request)
         FIREWALL_BANDWIDTHABUSE_MINATTACK = strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("minattack-bandwidthabuse", FIREWALL_BANDWIDTHABUSE_MINATTACK));
 
     return result;
@@ -1560,7 +1559,7 @@ UniValue firewallbandwidthabuseminattack(const JSONRPCRequest& request)
 UniValue firewallbandwidthabusemaxattack(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallbandwidthabusemaxattack \"ratio\"\n"
                             "\nBitcoin Firewall Max Attack Bandwidth Abuse Rule #1\n"
                             "\nArguments:\n"
@@ -1576,7 +1575,7 @@ UniValue firewallbandwidthabusemaxattack(const JSONRPCRequest& request)
         FIREWALL_BANDWIDTHABUSE_MAXATTACK = strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("maxattack-bandwidthabuse", FIREWALL_BANDWIDTHABUSE_MAXATTACK));
 
     return result;
@@ -1585,9 +1584,9 @@ UniValue firewallbandwidthabusemaxattack(const JSONRPCRequest& request)
 
 UniValue firewalldetectinvalidwallet(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalldetectinvalidwallet \"true|false\"\n"
                             "\nBitcoin Firewall Detect Invalid Wallet Rule #2\n"
                             "\nArguments:\n"
@@ -1611,7 +1610,7 @@ UniValue firewalldetectinvalidwallet(const JSONRPCRequest& request)
         FIREWALL_DETECT_INVALIDWALLET  = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("detect-invalidwallet", strCommand));
 
     return result;
@@ -1620,9 +1619,9 @@ UniValue firewalldetectinvalidwallet(const JSONRPCRequest& request)
 
 UniValue firewallblacklistinvalidwallet(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallblacklistinvalidwallet \"true|false\"\n"
                             "\nBitcoin Firewall Blacklist Invalid Wallet Rule #2 (session)\n"
                             "\nArguments:\n"
@@ -1646,7 +1645,7 @@ UniValue firewallblacklistinvalidwallet(const JSONRPCRequest& request)
         FIREWALL_BLACKLIST_INVALIDWALLET = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("blacklist-invalidwallet", strCommand));
 
     return result;
@@ -1655,9 +1654,9 @@ UniValue firewallblacklistinvalidwallet(const JSONRPCRequest& request)
 
 UniValue firewallbaninvalidwallet(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallbaninvalidwallet \"true|false\"\n"
                             "\nBitcoin Firewall Ban Invalid Wallet Rule #2 (permenant)\n"
                             "\nArguments:\n"
@@ -1681,7 +1680,7 @@ UniValue firewallbaninvalidwallet(const JSONRPCRequest& request)
         FIREWALL_BAN_INVALIDWALLET = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("ban-invalidwallet", strCommand));
 
     return result;
@@ -1691,7 +1690,7 @@ UniValue firewallbaninvalidwallet(const JSONRPCRequest& request)
 UniValue firewallbantimeinvalidwallet(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallbantimeinvalidwallet \"seconds\"\n"
                             "\nBitcoin Firewall Ban Time Invalid Wallet Rule #2\n"
                             "\nArguments:\n"
@@ -1707,7 +1706,7 @@ UniValue firewallbantimeinvalidwallet(const JSONRPCRequest& request)
         FIREWALL_BANTIME_INVALIDWALLET = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("bantime-invalidwallet", FIREWALL_BANTIME_INVALIDWALLET));
 
     return result;
@@ -1717,7 +1716,7 @@ UniValue firewallbantimeinvalidwallet(const JSONRPCRequest& request)
 UniValue firewallinvalidwalletminprotocol(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallinvalidwalletminprotocol \"protocol\"\n"
                             "\nBitcoin Firewall Min Protocol Invalid Wallet Rule #2\n"
                             "\nArguments:\n"
@@ -1733,7 +1732,7 @@ UniValue firewallinvalidwalletminprotocol(const JSONRPCRequest& request)
         FIREWALL_MINIMUM_PROTOCOL = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("minprotocol-invalidwallet", FIREWALL_MINIMUM_PROTOCOL));
 
     return result;
@@ -1743,7 +1742,7 @@ UniValue firewallinvalidwalletminprotocol(const JSONRPCRequest& request)
 UniValue firewallinvalidwalletmaxcheck(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallinvalidwalletmaxcheck \"seconds\"\n"
                             "\nBitcoin Firewall Max Check Invalid Wallet Rule #2\n"
                             "\nArguments:\n"
@@ -1759,7 +1758,7 @@ UniValue firewallinvalidwalletmaxcheck(const JSONRPCRequest& request)
         FIREWALL_INVALIDWALLET_MAXCHECK = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("maxcheck-invalidwallet", FIREWALL_INVALIDWALLET_MAXCHECK));
 
     return result;
@@ -1768,9 +1767,9 @@ UniValue firewallinvalidwalletmaxcheck(const JSONRPCRequest& request)
 
 UniValue firewalldetectforkedwallet(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalldetectforkedwallet \"true|false\"\n"
                             "\nBitcoin Firewall Detect Forked Wallet Rule #3\n"
                             "\nArguments:\n"
@@ -1794,7 +1793,7 @@ UniValue firewalldetectforkedwallet(const JSONRPCRequest& request)
         FIREWALL_DETECT_FORKEDWALLET = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("detect-forkedwallet", strCommand));
 
     return result;
@@ -1803,9 +1802,9 @@ UniValue firewalldetectforkedwallet(const JSONRPCRequest& request)
 
 UniValue firewallblacklistforkedwallet(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallblacklistforkedwallet \"true|false\"\n"
                             "\nBitcoin Firewall Blacklist Forked Wallet Rule #3 (session)\n"
                             "\nArguments:\n"
@@ -1829,7 +1828,7 @@ UniValue firewallblacklistforkedwallet(const JSONRPCRequest& request)
         FIREWALL_BLACKLIST_FORKEDWALLET = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("blacklist-forkedwallet", strCommand));
 
     return result;
@@ -1838,9 +1837,9 @@ UniValue firewallblacklistforkedwallet(const JSONRPCRequest& request)
 
 UniValue firewallbanforkedwallet(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallbanforkedwallet \"true|false\"\n"
                             "\nBitcoin Firewall Ban Forked Wallet Rule #3 (permenant)\n"
                             "\nArguments:\n"
@@ -1864,7 +1863,7 @@ UniValue firewallbanforkedwallet(const JSONRPCRequest& request)
         FIREWALL_BAN_FORKEDWALLET = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("ban-forkedwallet", strCommand));
 
     return result;
@@ -1874,7 +1873,7 @@ UniValue firewallbanforkedwallet(const JSONRPCRequest& request)
 UniValue firewallbantimeforkedwallet(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallbantimeforkedwallet \"seconds\"\n"
                             "\nBitcoin Firewall Ban Time Forked Wallet Rule #3\n"
                             "\nArguments:\n"
@@ -1890,7 +1889,7 @@ UniValue firewallbantimeforkedwallet(const JSONRPCRequest& request)
          FIREWALL_BANTIME_FORKEDWALLET = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("bantime-forkedwallet", FIREWALL_BANTIME_FORKEDWALLET));
 
     return result;
@@ -1899,10 +1898,10 @@ UniValue firewallbantimeforkedwallet(const JSONRPCRequest& request)
 
 UniValue firewallforkedwalletnodeheight(const JSONRPCRequest& request)
 {
-    string MSG;
+    std::string MSG;
 
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallforkedwalletnodeheight \"blockheight\"\n"
                             "\nBitcoin Firewall Adds Forked NodeHeight Flooding Wallet Rule #3\n"
                             "\nArguments:\n"
@@ -1926,7 +1925,7 @@ UniValue firewallforkedwalletnodeheight(const JSONRPCRequest& request)
         }
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("attackpattern-forkedwallet-nodeheight-add", MSG));
 
     return result;
@@ -1935,9 +1934,9 @@ UniValue firewallforkedwalletnodeheight(const JSONRPCRequest& request)
 
 UniValue firewalldetectfloodingwallet(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewalldetectfloodingwallet \"true|false\"\n"
                             "\nBitcoin Firewall Detect Flooding Wallet Rule #4\n"
                             "\nArguments:\n"
@@ -1961,7 +1960,7 @@ UniValue firewalldetectfloodingwallet(const JSONRPCRequest& request)
         FIREWALL_DETECT_FLOODINGWALLET = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("detect-floodingwallet", strCommand));
 
     return result;
@@ -1970,9 +1969,9 @@ UniValue firewalldetectfloodingwallet(const JSONRPCRequest& request)
 
 UniValue firewallblacklistfloodingwallet(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallblacklistfloodingwallet \"true|false\"\n"
                             "\nBitcoin Firewall Blacklist Flooding Wallet Rule #4 (session)\n"
                             "\nArguments:\n"
@@ -1996,7 +1995,7 @@ UniValue firewallblacklistfloodingwallet(const JSONRPCRequest& request)
         FIREWALL_BLACKLIST_FLOODINGWALLET = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("blacklist-floodingwallet", strCommand));
 
     return result;
@@ -2005,9 +2004,9 @@ UniValue firewallblacklistfloodingwallet(const JSONRPCRequest& request)
 
 UniValue firewallbanfloodingwallet(const JSONRPCRequest& request)
 {
-    string strCommand = "true";
+    std::string strCommand = "true";
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallbanfloodingwallet \"true|false\"\n"
                             "\nBitcoin Firewall Ban Flooding Wallet Rule #4 (permenant)\n"
                             "\nArguments:\n"
@@ -2031,7 +2030,7 @@ UniValue firewallbanfloodingwallet(const JSONRPCRequest& request)
         FIREWALL_BAN_FLOODINGWALLET = false;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("ban-floodingwallet", strCommand));
 
     return result;
@@ -2041,7 +2040,7 @@ UniValue firewallbanfloodingwallet(const JSONRPCRequest& request)
 UniValue firewallbantimefloodingwallet(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallbantimefloodingwallet \"seconds\"\n"
                             "\nBitcoin Firewall Ban Time Flooding Wallet Rule #4\n"
                             "\nArguments:\n"
@@ -2057,7 +2056,7 @@ UniValue firewallbantimefloodingwallet(const JSONRPCRequest& request)
         FIREWALL_BANTIME_FLOODINGWALLET = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("bantime-floodingwallet", FIREWALL_BANTIME_FLOODINGWALLET));
 
     return result;
@@ -2067,7 +2066,7 @@ UniValue firewallbantimefloodingwallet(const JSONRPCRequest& request)
 UniValue firewallfloodingwalletminbytes(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallfloodingwalletminbytes \"bytes\"\n"
                             "\nBitcoin Firewall Min Bytes Flooding Wallet Rule #4\n"
                             "\nArguments:\n"
@@ -2083,7 +2082,7 @@ UniValue firewallfloodingwalletminbytes(const JSONRPCRequest& request)
         FIREWALL_FLOODINGWALLET_MINBYTES = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("minbytes-floodingwallet", FIREWALL_FLOODINGWALLET_MINBYTES));
 
     return result;
@@ -2093,7 +2092,7 @@ UniValue firewallfloodingwalletminbytes(const JSONRPCRequest& request)
 UniValue firewallfloodingwalletmaxbytes(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallfloodingwalletmaxbytes \"bytes\"\n"
                             "\nBitcoin Firewall Max Bytes Flooding Wallet Rule #4\n"
                             "\nArguments:\n"
@@ -2109,7 +2108,7 @@ UniValue firewallfloodingwalletmaxbytes(const JSONRPCRequest& request)
         FIREWALL_FLOODINGWALLET_MAXBYTES = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("bantime-floodingwallet", FIREWALL_FLOODINGWALLET_MAXBYTES));
 
     return result;
@@ -2118,10 +2117,10 @@ UniValue firewallfloodingwalletmaxbytes(const JSONRPCRequest& request)
 
 UniValue firewallfloodingwalletattackpatternadd(const JSONRPCRequest& request)
 {
-    string MSG;
+    std::string MSG;
 
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallfloodingwalletattackpatternadd \"warnings\"\n"
                             "\nBitcoin Firewall Adds Attack Pattern Flooding Wallet Rule #4\n"
                             "\nArguments:\n"
@@ -2145,7 +2144,7 @@ UniValue firewallfloodingwalletattackpatternadd(const JSONRPCRequest& request)
         }
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("attackpattern-floodingwallet-attackpattern-add", MSG));
 
     return result;
@@ -2154,11 +2153,11 @@ UniValue firewallfloodingwalletattackpatternadd(const JSONRPCRequest& request)
 
 UniValue firewallfloodingwalletattackpatternremove(const JSONRPCRequest& request)
 {
-    string MSG;
+    std::string MSG;
     int i;
 
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallfloodingwalletattackpatternremove \"warnings\"\n"
                             "\nBitcoin Firewall Remove Attack Pattern Flooding Wallet Rule #4\n"
                             "\nArguments:\n"
@@ -2171,7 +2170,7 @@ UniValue firewallfloodingwalletattackpatternremove(const JSONRPCRequest& request
 
     if (request.params.size() == 1)
     {
-        string WARNING;
+        std::string WARNING;
         int TmpFloodPatternsCount;
         WARNING = request.params[0].get_str().c_str();
         TmpFloodPatternsCount = CountStringArray(FIREWALL_FLOODPATTERNS);
@@ -2189,7 +2188,7 @@ UniValue firewallfloodingwalletattackpatternremove(const JSONRPCRequest& request
         }
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("attackpattern-floodingwallet-attackpattern-remove", MSG));
 
     return result;
@@ -2199,7 +2198,7 @@ UniValue firewallfloodingwalletattackpatternremove(const JSONRPCRequest& request
 UniValue firewallfloodingwalletmintrafficavg(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallfloodingwalletmintrafficavg \"ratio\"\n"
                             "\nBitcoin Firewall Min Traffic Average Flooding Wallet Rule #4\n"
                             "\nArguments:\n"
@@ -2215,7 +2214,7 @@ UniValue firewallfloodingwalletmintrafficavg(const JSONRPCRequest& request)
         FIREWALL_FLOODINGWALLET_MINTRAFFICAVERAGE = strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("mintrafficavg-floodingwallet", FIREWALL_FLOODINGWALLET_MINTRAFFICAVERAGE));
 
     return result;
@@ -2225,7 +2224,7 @@ UniValue firewallfloodingwalletmintrafficavg(const JSONRPCRequest& request)
 UniValue firewallfloodingwalletmaxtrafficavg(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallbantimefloodingwallet \"ratio\"\n"
                             "\nBitcoin Firewall Max Traffic Average Flooding Wallet Rule #4\n"
                             "\nArguments:\n"
@@ -2241,7 +2240,7 @@ UniValue firewallfloodingwalletmaxtrafficavg(const JSONRPCRequest& request)
         FIREWALL_FLOODINGWALLET_MAXTRAFFICAVERAGE = strtod(request.params[0].get_str().c_str(), NULL);;
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("trafficavg-floodingwallet", FIREWALL_FLOODINGWALLET_MAXTRAFFICAVERAGE));
 
     return result;
@@ -2251,7 +2250,7 @@ UniValue firewallfloodingwalletmaxtrafficavg(const JSONRPCRequest& request)
 UniValue firewallfloodingwalletmincheck(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallfloodingwalletmincheck \"seconds\"\n"
                             "\nBitcoin Firewall Ban Time Flooding Wallet Rule #4\n"
                             "\nArguments:\n"
@@ -2267,7 +2266,7 @@ UniValue firewallfloodingwalletmincheck(const JSONRPCRequest& request)
         FIREWALL_FLOODINGWALLET_MINCHECK = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("mincheck-floodingwallet", FIREWALL_FLOODINGWALLET_MINCHECK));
 
     return result;
@@ -2277,7 +2276,7 @@ UniValue firewallfloodingwalletmincheck(const JSONRPCRequest& request)
 UniValue firewallfloodingwalletmaxcheck(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() == 0)
-        throw runtime_error(
+        throw std::runtime_error(
                             "firewallfloodingwalletmaxcheck \"seconds\"\n"
                             "\nBitcoin Firewall Max Check Flooding Wallet Rule #4\n"
                             "\nArguments:\n"
@@ -2293,9 +2292,8 @@ UniValue firewallfloodingwalletmaxcheck(const JSONRPCRequest& request)
         FIREWALL_FLOODINGWALLET_MAXCHECK = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
-    Object result;
+    UniValue result(UniValue::VOBJ);
     result.push_back(Pair("maxcheck-floodingwallet", FIREWALL_FLOODINGWALLET_MAXCHECK));
 
     return result;
 }
-*/

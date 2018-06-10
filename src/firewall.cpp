@@ -61,7 +61,6 @@ int CountIntArray(int *ArrayName)
 }
 
 
-
 std::string ModuleName = "[Bitcoin Firewall 1.3.0]";
 
 // *** Firewall Controls (General) ***
