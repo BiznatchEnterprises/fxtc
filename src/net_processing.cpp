@@ -511,8 +511,8 @@ void FindNextBlocksToDownload(NodeId nodeid, unsigned int count, std::vector<con
     int nWindowEnd = state->pindexLastCommonBlock->nHeight + BLOCK_DOWNLOAD_WINDOW;
     int nMaxHeight = std::min<int>(state->pindexBestKnownBlock->nHeight, nWindowEnd + 1);
 
-    CNode* pnode;
-    pnode->nSyncHeight = state->pindexBestKnownBlock->nHeight;
+    // Cnode *pnode = FIndNode(nodeid);
+    // pnode->nSyncheight = nMaxHeight;   
     
     NodeId waitingfor = -1;
     while (pindexWalk->nHeight < nMaxHeight) {

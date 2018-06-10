@@ -2080,19 +2080,30 @@ void CConnman::OpenNetworkConnection(const CAddress& addrConnect, bool fCountFai
     //
     // Initiate outbound network connection
     //
-    if (interruptNet) {
+    if (interruptNet)
+    {
         return;
     }
-    if (!fNetworkActive) {
+
+    if (!fNetworkActive)
+    {
         return;
     }
-    if (!pszDest) {
+
+    if (!pszDest)
+    {
         if (IsLocal(addrConnect) ||
             FindNode((CNetAddr)addrConnect) || IsBanned(addrConnect) ||
             FindNode(addrConnect.ToStringIPPort()))
+        {
             return;
-    } else if (FindNode(std::string(pszDest)))
+        }
+    }
+    else if (FindNode(std::string(pszDest)))
+    {
         return;
+    }
+
 
     CNode* pnode = ConnectNode(addrConnect, pszDest, fCountFailure);
 
@@ -2107,8 +2118,6 @@ void CConnman::OpenNetworkConnection(const CAddress& addrConnect, bool fCountFai
     {
         grantOutbound->MoveTo(pnode->grantOutbound);
     }
-        
-    pnode->fNetworkNode = true;
 
     if (fOneShot)
     {

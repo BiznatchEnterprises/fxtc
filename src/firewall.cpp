@@ -74,7 +74,7 @@ double FIREWALL_TRAFFIC_TOLERANCE = 0.0001; // Reduce for minimal fluctuation
 double FIREWALL_TRAFFIC_ZONE = 4; // + or - Traffic Range 
 
 // *** Firewall Debug (Live Output) ***
-bool FIREWALL_LIVE_DEBUG = false;
+bool FIREWALL_LIVE_DEBUG = true;
 bool FIREWALL_LIVEDEBUG_EXAM = true;
 bool FIREWALL_LIVEDEBUG_BANS = true;
 bool FIREWALL_LIVEDEBUG_BLACKLIST = true;
@@ -1033,7 +1033,8 @@ void Examination(CNode *pnode, string FromFunction)
             UpdateNodeStats = true;
         }
 
-        if (GetTime() - pnode->nTrafficTimestamp > 5){
+        if (GetTime() - pnode->nTrafficTimestamp > 5)
+        {
             UpdateNodeStats = true;
         }
 
@@ -1042,6 +1043,7 @@ void Examination(CNode *pnode, string FromFunction)
 
         if (UpdateNodeStats == true)
         {   
+            
             Firewall_AverageTraffic = Firewall_AverageTraffic + (double)pnode->nTrafficAverage;
             Firewall_AverageTraffic = Firewall_AverageTraffic / (double)2;
             Firewall_AverageTraffic = Firewall_AverageTraffic - (double)FIREWALL_TRAFFIC_TOLERANCE;      // reduce with tolerance
@@ -1055,6 +1057,7 @@ void Examination(CNode *pnode, string FromFunction)
                 Firewall_AverageSend = Firewall_AverageSend + pnode->nSendBytes / Connections;
                 Firewall_AverageRecv = Firewall_AverageRecv + pnode->nRecvBytes / Connections;
             }
+            
 
             if (FIREWALL_LIVE_DEBUG == true)
             {
