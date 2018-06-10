@@ -65,7 +65,7 @@ int CountIntArray(int *ArrayName)
 std::string ModuleName = "[Bitcoin Firewall 1.3.0]";
 
 // *** Firewall Controls (General) ***
-bool FIREWALL_ENABLED = false;
+bool FIREWALL_ENABLED = true;
 bool FIREWALL_CLEAR_BLACKLIST = false;
 bool FIREWALL_CLEAR_BANS = true;
 int FIREWALL_CLEARBANS_MINNODES = 5;
