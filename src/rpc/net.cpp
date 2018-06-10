@@ -658,10 +658,10 @@ void RegisterNetRPCCommands(CRPCTable &t)
 
 
 /*
-Value firewallstatus(const Array& params, bool fHelp)
+UniValue firewallstatus(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() != 0)
+    if (request.fHelp || request.params.size() != 0)
         throw runtime_error(
                             "firewallstatus \"\n"
                             "\nGet the status of Bitcoin Firewall.\n"
@@ -700,14 +700,14 @@ Value firewallstatus(const Array& params, bool fHelp)
     result.push_back(Pair("bantime-forkedwallet", (int64_t)FIREWALL_BANTIME_FORKEDWALLET));
     result.push_back(Pair("bantime-floodingwallet", (int64_t)FIREWALL_BANTIME_FLOODINGWALLET));
 
-return result;
+    return result;
 }
 
 
-Value firewallenabled(const Array& params, bool fHelp)
+UniValue firewallenabled(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallenabled \"true|false\"\n"
                             "\nChange the status of Bitcoin Firewall.\n"
@@ -721,7 +721,7 @@ Value firewallenabled(const Array& params, bool fHelp)
 
     if (params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -733,19 +733,17 @@ Value firewallenabled(const Array& params, bool fHelp)
         FIREWALL_ENABLED = false;
     }
 
-
     Object result;
     result.push_back(Pair("enabled", strCommand));
 
-return result;
+    return result;
 }
 
 
-
-Value firewallclearblacklist(const Array& params, bool fHelp)
+UniValue firewallclearblacklist(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallclearblacklist \"true|false\"\n"
                             "\nBitcoin Firewall Clear Blacklist (session)\n"
@@ -757,9 +755,9 @@ Value firewallclearblacklist(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallclearblacklist", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -771,18 +769,17 @@ Value firewallclearblacklist(const Array& params, bool fHelp)
         FIREWALL_CLEAR_BLACKLIST = false;
     }
 
-
     Object result;
     result.push_back(Pair("clear-blacklist", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewallclearbanlist(const Array& params, bool fHelp)
+UniValue firewallclearbanlist(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallclearbanlist \"true|false\"\n"
                             "\nBitcoin Firewall Clear Ban List (permenant)\n"
@@ -796,7 +793,7 @@ Value firewallclearbanlist(const Array& params, bool fHelp)
 
     if (params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -808,18 +805,17 @@ Value firewallclearbanlist(const Array& params, bool fHelp)
         FIREWALL_CLEAR_BANS = false;
     }
 
-
     Object result;
     result.push_back(Pair("clear-banlist", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewalldebug(const Array& params, bool fHelp)
+UniValue firewalldebug(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalldebug \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output\n"
@@ -831,9 +827,9 @@ Value firewalldebug(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalldebug", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -845,17 +841,16 @@ Value firewalldebug(const Array& params, bool fHelp)
         FIREWALL_LIVE_DEBUG = false;
     }
 
-
     Object result;
     result.push_back(Pair("live-debug", strCommand));
 
-return result;
+    return result;
 }
 
-Value firewalldebugexam(const Array& params, bool fHelp)
+UniValue firewalldebugexam(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalldebugexam \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Exam\n"
@@ -867,9 +862,9 @@ Value firewalldebugexam(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalldebugexam", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -881,18 +876,17 @@ Value firewalldebugexam(const Array& params, bool fHelp)
         FIREWALL_LIVEDEBUG_EXAM = false;
     }
 
-
     Object result;
     result.push_back(Pair("live-debug-exam", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewalldebugbans(const Array& params, bool fHelp)
+UniValue firewalldebugbans(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalldebugbans \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Bans\n"
@@ -904,9 +898,9 @@ Value firewalldebugbans(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalldebugbans", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -918,17 +912,16 @@ Value firewalldebugbans(const Array& params, bool fHelp)
         FIREWALL_LIVEDEBUG_BANS = false;
     }
 
-
     Object result;
     result.push_back(Pair("live-debug-bans", strCommand));
 
-return result;
+    return result;
 }
 
-Value firewalldebugblacklist(const Array& params, bool fHelp)
+UniValue firewalldebugblacklist(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalldebugblacklist \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Blacklist\n"
@@ -940,9 +933,9 @@ Value firewalldebugblacklist(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalldebugblacklist", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -954,18 +947,17 @@ Value firewalldebugblacklist(const Array& params, bool fHelp)
         FIREWALL_LIVEDEBUG_BLACKLIST = false;
     }
 
-
     Object result;
     result.push_back(Pair("live-debug-blacklist", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewalldebugdisconnect(const Array& params, bool fHelp)
+UniValue firewalldebugdisconnect(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalldebugdisconnect \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Disconnect\n"
@@ -977,9 +969,9 @@ Value firewalldebugdisconnect(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalldebugdisconnect", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -991,18 +983,17 @@ Value firewalldebugdisconnect(const Array& params, bool fHelp)
         FIREWALL_LIVEDEBUG_DISCONNECT = false;
     }
 
-
     Object result;
     result.push_back(Pair("live-debug-disconnect", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewalldebugbandwidthabuse(const Array& params, bool fHelp)
+UniValue firewalldebugbandwidthabuse(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalldebugbandwidthabuse \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Bandwidth Abuse\n"
@@ -1014,9 +1005,9 @@ Value firewalldebugbandwidthabuse(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalldebugbandwidthabuse", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1028,18 +1019,17 @@ Value firewalldebugbandwidthabuse(const Array& params, bool fHelp)
         FIREWALL_LIVEDEBUG_BANDWIDTHABUSE = false;
     }
 
-
     Object result;
     result.push_back(Pair("live-debug-bandwidthabuse", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewalldebugnofalsepositivebandwidthabuse(const Array& params, bool fHelp)
+UniValue firewalldebugnofalsepositivebandwidthabuse(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalldebugnofalsepositivebandwidthabuse \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - No False Positive (Bandwidth Abuse)\n"
@@ -1051,9 +1041,9 @@ Value firewalldebugnofalsepositivebandwidthabuse(const Array& params, bool fHelp
                             + HelpExampleCli("firewalldebugnofalsepositivebandwidthabuse", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1065,18 +1055,17 @@ Value firewalldebugnofalsepositivebandwidthabuse(const Array& params, bool fHelp
         FIREWALL_LIVEDEBUG_NOFALSEPOSITIVE = false;
     }
 
-
     Object result;
     result.push_back(Pair("live-debug-nofalsepositive", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewalldebuginvalidwallet(const Array& params, bool fHelp)
+UniValue firewalldebuginvalidwallet(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalldebuginvalidwallet \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Invalid Wallet\n"
@@ -1088,9 +1077,9 @@ Value firewalldebuginvalidwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalldebuginvalidwallet", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1102,18 +1091,17 @@ Value firewalldebuginvalidwallet(const Array& params, bool fHelp)
         FIREWALL_LIVEDEBUG_INVALIDWALLET = false;
     }
 
-
     Object result;
     result.push_back(Pair("live-debug-invalidwallet", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewalldebugforkedwallet(const Array& params, bool fHelp)
+UniValue firewalldebugforkedwallet(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalldebugforkedwallet \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Forked Wallet\n"
@@ -1125,9 +1113,9 @@ Value firewalldebugforkedwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalldebugforkedwallet", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1139,18 +1127,17 @@ Value firewalldebugforkedwallet(const Array& params, bool fHelp)
         FIREWALL_LIVEDEBUG_FORKEDWALLET = false;
     }
 
-
     Object result;
     result.push_back(Pair("live-debug-forkedwallet", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewalldebugfloodingwallet(const Array& params, bool fHelp)
+UniValue firewalldebugfloodingwallet(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalldebugfloodingwallet \"true|false\"\n"
                             "\nBitcoin Firewall Live Debug Output - Flooding Wallet\n"
@@ -1161,9 +1148,9 @@ Value firewalldebugfloodingwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalldebugfloodingwallet", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1175,17 +1162,16 @@ Value firewalldebugfloodingwallet(const Array& params, bool fHelp)
         FIREWALL_LIVEDEBUG_FLOODINGWALLET = false;
     }
 
-
     Object result;
     result.push_back(Pair("live-debug-floodingwallet", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewallaveragetolerance(const Array& params, bool fHelp)
+UniValue firewallaveragetolerance(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallaveragetolerance \"tolerance\"\n"
                             "\nBitcoin Firewall Exam Setting (Average Block Tolerance)\n"
@@ -1196,21 +1182,21 @@ Value firewallaveragetolerance(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallaveragetolerance", "0.1")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_AVERAGE_TOLERANCE = strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_AVERAGE_TOLERANCE = strtod(request.params[0].get_str().c_str(), NULL);
     }
 
     Object result;
     result.push_back(Pair("exam-average-tolerance", FIREWALL_AVERAGE_TOLERANCE));
 
-return result;
+    return result;
 }
 
 
-Value firewallaveragerange(const Array& params, bool fHelp)
+UniValue firewallaveragerange(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallaveragerange \"zone\"\n"
                             "\nBitcoin Firewall Exam Setting (Average Block Range)\n"
@@ -1221,21 +1207,21 @@ Value firewallaveragerange(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallaveragerange", "50")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_AVERAGE_RANGE = (int)strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_AVERAGE_RANGE = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
     Object result;
     result.push_back(Pair("exam-average-range", FIREWALL_AVERAGE_RANGE));
 
-return result;
+    return result;
 }
 
 
-Value firewalltraffictolerance(const Array& params, bool fHelp)
+UniValue firewalltraffictolerance(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalltraffictolerance \"tolerance\"\n"
                             "\nBitcoin Firewall Exam Setting (Traffic Tolerance)\n"
@@ -1246,21 +1232,21 @@ Value firewalltraffictolerance(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalltraffictolerance", "0.1")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_TRAFFIC_TOLERANCE = strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_TRAFFIC_TOLERANCE = strtod(request.params[0].get_str().c_str(), NULL);
     }
 
     Object result;
     result.push_back(Pair("exam-traffic-tolerance", FIREWALL_TRAFFIC_TOLERANCE));
 
-return result;
+    return result;
 }
 
 
-Value firewalltrafficzone(const Array& params, bool fHelp)
+UniValue firewalltrafficzone(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalltrafficzone \"zone\"\n"
                             "\nBitcoin Firewall Exam Setting (Traffic Zone)\n"
@@ -1271,23 +1257,23 @@ Value firewalltrafficzone(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalltrafficzone", "50.50")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_TRAFFIC_ZONE = strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_TRAFFIC_ZONE = strtod(request.params[0].get_str().c_str(), NULL);
     }
 
     Object result;
     result.push_back(Pair("exam-traffic-zone", FIREWALL_TRAFFIC_ZONE));
 
-return result;
+    return result;
 }
 
 
-Value firewalladdtowhitelist(const Array& params, bool fHelp)
+UniValue firewalladdtowhitelist(const JSONRPCRequest& request)
 {
     string MSG;
 
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalladdtowhitelist \"address\"\n"
                             "\nBitcoin Firewall Adds IP Address to General Rule\n"
@@ -1299,7 +1285,7 @@ Value firewalladdtowhitelist(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalladdtowhitelist", "127.0.0.1")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
         if (CountStringArray(FIREWALL_WHITELIST) < 256)
         {
@@ -1315,15 +1301,15 @@ Value firewalladdtowhitelist(const Array& params, bool fHelp)
     Object result;
     result.push_back(Pair("exam-whitelist-add", MSG));
 
-return result;
+    return result;
 }
 
 
-Value firewalladdtoblacklist(const Array& params, bool fHelp)
+UniValue firewalladdtoblacklist(const JSONRPCRequest& request)
 {
     string MSG;
 
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalladdtoblacklist \"address\"\n"
                             "\nBitcoin Firewall Adds IP Address to General Rule\n"
@@ -1335,11 +1321,11 @@ Value firewalladdtoblacklist(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalladdtoblacklist", "127.0.0.1")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
         if (CountStringArray(FIREWALL_BLACKLIST) < 256)
         {
-            FIREWALL_BLACKLIST[CountStringArray(FIREWALL_BLACKLIST)] = params[0].get_str();
+            FIREWALL_BLACKLIST[CountStringArray(FIREWALL_BLACKLIST)] = request.params[0].get_str();
             MSG = CountStringArray(FIREWALL_BLACKLIST);
         }
         else
@@ -1351,14 +1337,14 @@ Value firewalladdtoblacklist(const Array& params, bool fHelp)
     Object result;
     result.push_back(Pair("exam-blacklist-add", MSG));
 
-return result;
+    return result;
 }
 
 
-Value firewalldetectbandwidthabuse(const Array& params, bool fHelp)
+UniValue firewalldetectbandwidthabuse(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalldetectbandwidthabuse \"true|false\"\n"
                             "\nBitcoin Firewall Detect Bandwidth Abuse Rule #1\n"
@@ -1369,7 +1355,7 @@ Value firewalldetectbandwidthabuse(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalldetectbandwidthabuse", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
         strCommand = params[0].get_str();
     }
@@ -1383,17 +1369,17 @@ Value firewalldetectbandwidthabuse(const Array& params, bool fHelp)
         FIREWALL_DETECT_BANDWIDTHABUSE = false;
     }
 
-
     Object result;
     result.push_back(Pair("detect-bandwidthabuse", strCommand));
 
-return result;
+    return result;
 }
 
-Value firewallblacklistbandwidthabuse(const Array& params, bool fHelp)
+
+UniValue firewallblacklistbandwidthabuse(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallblacklistbandwidthabuse \"true|false\"\n"
                             "\nBitcoin Firewall Blacklist Bandwidth Abuse Rule #1 (session)\n"
@@ -1404,9 +1390,9 @@ Value firewallblacklistbandwidthabuse(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallblacklistbandwidthabuse", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1418,17 +1404,17 @@ Value firewallblacklistbandwidthabuse(const Array& params, bool fHelp)
         FIREWALL_BLACKLIST_BANDWIDTHABUSE = false;
     }
 
-
     Object result;
     result.push_back(Pair("blacklist-bandwidthabuse", strCommand));
 
-return result;
+    return result;
 }
 
-Value firewallbanbandwidthabuse(const Array& params, bool fHelp)
+
+UniValue firewallbanbandwidthabuse(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallbanbandwidthabuse \"true|false\"\n"
                             "\nBitcoin Firewall Ban Bandwidth Abuse Rule #1 (permenant)\n"
@@ -1439,9 +1425,9 @@ Value firewallbanbandwidthabuse(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallbanbandwidthabuse", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1453,17 +1439,17 @@ Value firewallbanbandwidthabuse(const Array& params, bool fHelp)
         FIREWALL_BAN_BANDWIDTHABUSE = false;
     }
 
-
     Object result;
     result.push_back(Pair("ban-bandwidthabuse", strCommand));
 
-return result;
+    return result;
 }
 
-Value firewallnofalsepositivebandwidthabuse(const Array& params, bool fHelp)
+
+UniValue firewallnofalsepositivebandwidthabuse(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallnofalsepositivebandwidthabuse \"true|false\"\n"
                             "\nBitcoin Firewall False Positive Protection Rule #1\n"
@@ -1474,9 +1460,9 @@ Value firewallnofalsepositivebandwidthabuse(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallnofalsepositivebandwidthabuse", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1488,17 +1474,16 @@ Value firewallnofalsepositivebandwidthabuse(const Array& params, bool fHelp)
         FIREWALL_NOFALSEPOSITIVE_BANDWIDTHABUSE = false;
     }
 
-
     Object result;
     result.push_back(Pair("firewallnofalsepositivebandwidthabuse", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewallbantimebandwidthabuse(const Array& params, bool fHelp)
+UniValue firewallbantimebandwidthabuse(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallbantimebandwidthabuse \"seconds\"\n"
                             "\nBitcoin Firewall Ban Time Bandwidth Abuse Rule #1\n"
@@ -1510,22 +1495,21 @@ Value firewallbantimebandwidthabuse(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallbantimebandwidthabuse", "10000000")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_BANTIME_BANDWIDTHABUSE = (int)strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_BANTIME_BANDWIDTHABUSE = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
-
 
     Object result;
     result.push_back(Pair("bantime-bandwidthabuse", FIREWALL_BANTIME_BANDWIDTHABUSE));
 
-return result;
+    return result;
 }
 
 
-Value firewallbandwidthabusemaxcheck(const Array& params, bool fHelp)
+UniValue firewallbandwidthabusemaxcheck(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallbandwidthabusemaxcheck \"seconds\"\n"
                             "\nBitcoin Firewall Max Check Bandwidth Abuse Rule #1\n"
@@ -1537,21 +1521,20 @@ Value firewallbandwidthabusemaxcheck(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallbandwidthabusemaxcheck", "10000000")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_BANDWIDTHABUSE_MAXCHECK = (int)strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_BANDWIDTHABUSE_MAXCHECK = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
-
 
     Object result;
     result.push_back(Pair("maxcheck-bandwidthabuse", FIREWALL_BANDWIDTHABUSE_MAXCHECK));
 
-return result;
+    return result;
 }
 
-Value firewallbandwidthabuseminattack(const Array& params, bool fHelp)
+UniValue firewallbandwidthabuseminattack(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallbandwidthabuseminattack \"value\"\n"
                             "\nBitcoin Firewall Min Attack Bandwidth Abuse Rule #1\n"
@@ -1563,21 +1546,20 @@ Value firewallbandwidthabuseminattack(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallbandwidthabuseminattack", "17.005")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_BANDWIDTHABUSE_MINATTACK = strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_BANDWIDTHABUSE_MINATTACK = strtod(request.params[0].get_str().c_str(), NULL);
     }
-
 
     Object result;
     result.push_back(Pair("minattack-bandwidthabuse", FIREWALL_BANDWIDTHABUSE_MINATTACK));
 
-return result;
+    return result;
 }
 
-Value firewallbandwidthabusemaxattack(const Array& params, bool fHelp)
+UniValue firewallbandwidthabusemaxattack(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallbandwidthabusemaxattack \"ratio\"\n"
                             "\nBitcoin Firewall Max Attack Bandwidth Abuse Rule #1\n"
@@ -1589,23 +1571,22 @@ Value firewallbandwidthabusemaxattack(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallbandwidthabusemaxattack", "18.004")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_BANDWIDTHABUSE_MAXATTACK = strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_BANDWIDTHABUSE_MAXATTACK = strtod(request.params[0].get_str().c_str(), NULL);
     }
-
 
     Object result;
     result.push_back(Pair("maxattack-bandwidthabuse", FIREWALL_BANDWIDTHABUSE_MAXATTACK));
 
-return result;
+    return result;
 }
 
 
-Value firewalldetectinvalidwallet(const Array& params, bool fHelp)
+UniValue firewalldetectinvalidwallet(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalldetectinvalidwallet \"true|false\"\n"
                             "\nBitcoin Firewall Detect Invalid Wallet Rule #2\n"
@@ -1616,9 +1597,9 @@ Value firewalldetectinvalidwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalldetectinvalidwallet", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1630,18 +1611,17 @@ Value firewalldetectinvalidwallet(const Array& params, bool fHelp)
         FIREWALL_DETECT_INVALIDWALLET  = false;
     }
 
-
     Object result;
     result.push_back(Pair("detect-invalidwallet", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewallblacklistinvalidwallet(const Array& params, bool fHelp)
+UniValue firewallblacklistinvalidwallet(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallblacklistinvalidwallet \"true|false\"\n"
                             "\nBitcoin Firewall Blacklist Invalid Wallet Rule #2 (session)\n"
@@ -1652,9 +1632,9 @@ Value firewallblacklistinvalidwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallblacklistinvalidwallet", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1666,18 +1646,17 @@ Value firewallblacklistinvalidwallet(const Array& params, bool fHelp)
         FIREWALL_BLACKLIST_INVALIDWALLET = false;
     }
 
-
     Object result;
     result.push_back(Pair("blacklist-invalidwallet", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewallbaninvalidwallet(const Array& params, bool fHelp)
+UniValue firewallbaninvalidwallet(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallbaninvalidwallet \"true|false\"\n"
                             "\nBitcoin Firewall Ban Invalid Wallet Rule #2 (permenant)\n"
@@ -1688,9 +1667,9 @@ Value firewallbaninvalidwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallbaninvalidwallet", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1702,17 +1681,16 @@ Value firewallbaninvalidwallet(const Array& params, bool fHelp)
         FIREWALL_BAN_INVALIDWALLET = false;
     }
 
-
     Object result;
     result.push_back(Pair("ban-invalidwallet", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewallbantimeinvalidwallet(const Array& params, bool fHelp)
+UniValue firewallbantimeinvalidwallet(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallbantimeinvalidwallet \"seconds\"\n"
                             "\nBitcoin Firewall Ban Time Invalid Wallet Rule #2\n"
@@ -1724,21 +1702,21 @@ Value firewallbantimeinvalidwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallbantimeinvalidwallet", "10000000")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_BANTIME_INVALIDWALLET = (int)strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_BANTIME_INVALIDWALLET = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
     Object result;
     result.push_back(Pair("bantime-invalidwallet", FIREWALL_BANTIME_INVALIDWALLET));
 
-return result;
+    return result;
 }
 
 
-Value firewallinvalidwalletminprotocol(const Array& params, bool fHelp)
+UniValue firewallinvalidwalletminprotocol(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallinvalidwalletminprotocol \"protocol\"\n"
                             "\nBitcoin Firewall Min Protocol Invalid Wallet Rule #2\n"
@@ -1750,21 +1728,21 @@ Value firewallinvalidwalletminprotocol(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallinvalidwalletminprotocol", "10000000")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_MINIMUM_PROTOCOL = (int)strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_MINIMUM_PROTOCOL = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
     Object result;
     result.push_back(Pair("minprotocol-invalidwallet", FIREWALL_MINIMUM_PROTOCOL));
 
-return result;
+    return result;
 }
 
 
-Value firewallinvalidwalletmaxcheck(const Array& params, bool fHelp)
+UniValue firewallinvalidwalletmaxcheck(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallinvalidwalletmaxcheck \"seconds\"\n"
                             "\nBitcoin Firewall Max Check Invalid Wallet Rule #2\n"
@@ -1776,22 +1754,22 @@ Value firewallinvalidwalletmaxcheck(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallinvalidwalletmaxcheck", "10000000")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_INVALIDWALLET_MAXCHECK = (int)strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_INVALIDWALLET_MAXCHECK = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
     Object result;
     result.push_back(Pair("maxcheck-invalidwallet", FIREWALL_INVALIDWALLET_MAXCHECK));
 
-return result;
+    return result;
 }
 
 
-Value firewalldetectforkedwallet(const Array& params, bool fHelp)
+UniValue firewalldetectforkedwallet(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalldetectforkedwallet \"true|false\"\n"
                             "\nBitcoin Firewall Detect Forked Wallet Rule #3\n"
@@ -1802,9 +1780,9 @@ Value firewalldetectforkedwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalldetectforkedwallet", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1816,18 +1794,17 @@ Value firewalldetectforkedwallet(const Array& params, bool fHelp)
         FIREWALL_DETECT_FORKEDWALLET = false;
     }
 
-
     Object result;
     result.push_back(Pair("detect-forkedwallet", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewallblacklistforkedwallet(const Array& params, bool fHelp)
+UniValue firewallblacklistforkedwallet(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallblacklistforkedwallet \"true|false\"\n"
                             "\nBitcoin Firewall Blacklist Forked Wallet Rule #3 (session)\n"
@@ -1838,9 +1815,9 @@ Value firewallblacklistforkedwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallblacklistforkedwallet", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1852,18 +1829,17 @@ Value firewallblacklistforkedwallet(const Array& params, bool fHelp)
         FIREWALL_BLACKLIST_FORKEDWALLET = false;
     }
 
-
     Object result;
     result.push_back(Pair("blacklist-forkedwallet", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewallbanforkedwallet(const Array& params, bool fHelp)
+UniValue firewallbanforkedwallet(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallbanforkedwallet \"true|false\"\n"
                             "\nBitcoin Firewall Ban Forked Wallet Rule #3 (permenant)\n"
@@ -1874,9 +1850,9 @@ Value firewallbanforkedwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallbanforkedwallet", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1888,17 +1864,16 @@ Value firewallbanforkedwallet(const Array& params, bool fHelp)
         FIREWALL_BAN_FORKEDWALLET = false;
     }
 
-
     Object result;
     result.push_back(Pair("ban-forkedwallet", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewallbantimeforkedwallet(const Array& params, bool fHelp)
+UniValue firewallbantimeforkedwallet(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallbantimeforkedwallet \"seconds\"\n"
                             "\nBitcoin Firewall Ban Time Forked Wallet Rule #3\n"
@@ -1910,23 +1885,23 @@ Value firewallbantimeforkedwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallbantimeinvalidwallet", "10000000")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-         FIREWALL_BANTIME_FORKEDWALLET = (int)strtod(params[0].get_str().c_str(), NULL);
+         FIREWALL_BANTIME_FORKEDWALLET = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
     Object result;
     result.push_back(Pair("bantime-forkedwallet", FIREWALL_BANTIME_FORKEDWALLET));
 
-return result;
+    return result;
 }
 
 
-Value firewallforkedwalletnodeheight(const Array& params, bool fHelp)
+UniValue firewallforkedwalletnodeheight(const JSONRPCRequest& request)
 {
     string MSG;
 
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallforkedwalletnodeheight \"blockheight\"\n"
                             "\nBitcoin Firewall Adds Forked NodeHeight Flooding Wallet Rule #3\n"
@@ -1938,11 +1913,11 @@ Value firewallforkedwalletnodeheight(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallforkedwalletnodeheight", "10000000")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
         if (CountIntArray(FIREWALL_FORKED_NODEHEIGHT) < 256)
         {
-            FIREWALL_FORKED_NODEHEIGHT[CountIntArray(FIREWALL_FORKED_NODEHEIGHT)] = (int)strtod(params[0].get_str().c_str(), NULL);
+            FIREWALL_FORKED_NODEHEIGHT[CountIntArray(FIREWALL_FORKED_NODEHEIGHT)] = (int)strtod(request.params[0].get_str().c_str(), NULL);
             MSG = CountIntArray(FIREWALL_FORKED_NODEHEIGHT);
         }
         else
@@ -1954,14 +1929,14 @@ Value firewallforkedwalletnodeheight(const Array& params, bool fHelp)
     Object result;
     result.push_back(Pair("attackpattern-forkedwallet-nodeheight-add", MSG));
 
-return result;
+    return result;
 }
 
 
-Value firewalldetectfloodingwallet(const Array& params, bool fHelp)
+UniValue firewalldetectfloodingwallet(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewalldetectfloodingwallet \"true|false\"\n"
                             "\nBitcoin Firewall Detect Flooding Wallet Rule #4\n"
@@ -1972,9 +1947,9 @@ Value firewalldetectfloodingwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewalldetectfloodingwallet", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -1986,18 +1961,17 @@ Value firewalldetectfloodingwallet(const Array& params, bool fHelp)
         FIREWALL_DETECT_FLOODINGWALLET = false;
     }
 
-
     Object result;
     result.push_back(Pair("detect-floodingwallet", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewallblacklistfloodingwallet(const Array& params, bool fHelp)
+UniValue firewallblacklistfloodingwallet(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallblacklistfloodingwallet \"true|false\"\n"
                             "\nBitcoin Firewall Blacklist Flooding Wallet Rule #4 (session)\n"
@@ -2008,9 +1982,9 @@ Value firewallblacklistfloodingwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallblacklistfloodingwallet", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -2022,18 +1996,17 @@ Value firewallblacklistfloodingwallet(const Array& params, bool fHelp)
         FIREWALL_BLACKLIST_FLOODINGWALLET = false;
     }
 
-
     Object result;
     result.push_back(Pair("blacklist-floodingwallet", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewallbanfloodingwallet(const Array& params, bool fHelp)
+UniValue firewallbanfloodingwallet(const JSONRPCRequest& request)
 {
     string strCommand = "true";
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallbanfloodingwallet \"true|false\"\n"
                             "\nBitcoin Firewall Ban Flooding Wallet Rule #4 (permenant)\n"
@@ -2044,9 +2017,9 @@ Value firewallbanfloodingwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallbanfloodingwallet", "false")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        strCommand = params[0].get_str();
+        strCommand = request.params[0].get_str();
     }
 
     if (strCommand == "true")
@@ -2058,17 +2031,16 @@ Value firewallbanfloodingwallet(const Array& params, bool fHelp)
         FIREWALL_BAN_FLOODINGWALLET = false;
     }
 
-
     Object result;
     result.push_back(Pair("ban-floodingwallet", strCommand));
 
-return result;
+    return result;
 }
 
 
-Value firewallbantimefloodingwallet(const Array& params, bool fHelp)
+UniValue firewallbantimefloodingwallet(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallbantimefloodingwallet \"seconds\"\n"
                             "\nBitcoin Firewall Ban Time Flooding Wallet Rule #4\n"
@@ -2080,21 +2052,21 @@ Value firewallbantimefloodingwallet(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallbantimefloodingwallet", "10000000")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_BANTIME_FLOODINGWALLET = (int)strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_BANTIME_FLOODINGWALLET = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
     Object result;
     result.push_back(Pair("bantime-floodingwallet", FIREWALL_BANTIME_FLOODINGWALLET));
 
-return result;
+    return result;
 }
 
 
-Value firewallfloodingwalletminbytes(const Array& params, bool fHelp)
+UniValue firewallfloodingwalletminbytes(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallfloodingwalletminbytes \"bytes\"\n"
                             "\nBitcoin Firewall Min Bytes Flooding Wallet Rule #4\n"
@@ -2106,21 +2078,21 @@ Value firewallfloodingwalletminbytes(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallfloodingwalletminbytes", "10000000")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_FLOODINGWALLET_MINBYTES = (int)strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_FLOODINGWALLET_MINBYTES = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
     Object result;
     result.push_back(Pair("minbytes-floodingwallet", FIREWALL_FLOODINGWALLET_MINBYTES));
 
-return result;
+    return result;
 }
 
 
-Value firewallfloodingwalletmaxbytes(const Array& params, bool fHelp)
+UniValue firewallfloodingwalletmaxbytes(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallfloodingwalletmaxbytes \"bytes\"\n"
                             "\nBitcoin Firewall Max Bytes Flooding Wallet Rule #4\n"
@@ -2132,23 +2104,23 @@ Value firewallfloodingwalletmaxbytes(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallfloodingwalletmaxbytes", "10000000")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_FLOODINGWALLET_MAXBYTES = (int)strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_FLOODINGWALLET_MAXBYTES = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
     Object result;
     result.push_back(Pair("bantime-floodingwallet", FIREWALL_FLOODINGWALLET_MAXBYTES));
 
-return result;
+    return result;
 }
 
 
-Value firewallfloodingwalletattackpatternadd(const Array& params, bool fHelp)
+UniValue firewallfloodingwalletattackpatternadd(const JSONRPCRequest& request)
 {
     string MSG;
 
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallfloodingwalletattackpatternadd \"warnings\"\n"
                             "\nBitcoin Firewall Adds Attack Pattern Flooding Wallet Rule #4\n"
@@ -2160,11 +2132,11 @@ Value firewallfloodingwalletattackpatternadd(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallfloodingwalletattackpatternadd", "10000000")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
         if (CountStringArray(FIREWALL_FLOODPATTERNS) < 256)
         {
-            FIREWALL_FLOODPATTERNS[CountStringArray(FIREWALL_FLOODPATTERNS)] = params[0].get_str().c_str();
+            FIREWALL_FLOODPATTERNS[CountStringArray(FIREWALL_FLOODPATTERNS)] = request.params[0].get_str().c_str();
             MSG = CountStringArray(FIREWALL_FLOODPATTERNS);
         }
         else
@@ -2176,16 +2148,16 @@ Value firewallfloodingwalletattackpatternadd(const Array& params, bool fHelp)
     Object result;
     result.push_back(Pair("attackpattern-floodingwallet-attackpattern-add", MSG));
 
-return result;
+    return result;
 }
 
 
-Value firewallfloodingwalletattackpatternremove(const Array& params, bool fHelp)
+UniValue firewallfloodingwalletattackpatternremove(const JSONRPCRequest& request)
 {
     string MSG;
     int i;
 
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallfloodingwalletattackpatternremove \"warnings\"\n"
                             "\nBitcoin Firewall Remove Attack Pattern Flooding Wallet Rule #4\n"
@@ -2197,11 +2169,11 @@ Value firewallfloodingwalletattackpatternremove(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallfloodingwalletattackpatternremove", "10000000")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
         string WARNING;
         int TmpFloodPatternsCount;
-        WARNING = params[0].get_str().c_str();
+        WARNING = request.params[0].get_str().c_str();
         TmpFloodPatternsCount = CountStringArray(FIREWALL_FLOODPATTERNS);
 
         MSG = "Not Found";
@@ -2217,17 +2189,16 @@ Value firewallfloodingwalletattackpatternremove(const Array& params, bool fHelp)
         }
     }
 
-
     Object result;
     result.push_back(Pair("attackpattern-floodingwallet-attackpattern-remove", MSG));
 
-return result;
+    return result;
 }
 
 
-Value firewallfloodingwalletmintrafficavg(const Array& params, bool fHelp)
+UniValue firewallfloodingwalletmintrafficavg(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallfloodingwalletmintrafficavg \"ratio\"\n"
                             "\nBitcoin Firewall Min Traffic Average Flooding Wallet Rule #4\n"
@@ -2239,21 +2210,21 @@ Value firewallfloodingwalletmintrafficavg(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallfloodingwalletmintrafficav", "12000.014")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_FLOODINGWALLET_MINTRAFFICAVERAGE = strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_FLOODINGWALLET_MINTRAFFICAVERAGE = strtod(request.params[0].get_str().c_str(), NULL);
     }
 
     Object result;
     result.push_back(Pair("mintrafficavg-floodingwallet", FIREWALL_FLOODINGWALLET_MINTRAFFICAVERAGE));
 
-return result;
+    return result;
 }
 
 
-Value firewallfloodingwalletmaxtrafficavg(const Array& params, bool fHelp)
+UniValue firewallfloodingwalletmaxtrafficavg(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallbantimefloodingwallet \"ratio\"\n"
                             "\nBitcoin Firewall Max Traffic Average Flooding Wallet Rule #4\n"
@@ -2265,21 +2236,21 @@ Value firewallfloodingwalletmaxtrafficavg(const Array& params, bool fHelp)
                             + HelpExampleCli("ffirewallfloodingwalletmaxtrafficavg", "10.8")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_FLOODINGWALLET_MAXTRAFFICAVERAGE = strtod(params[0].get_str().c_str(), NULL);;
+        FIREWALL_FLOODINGWALLET_MAXTRAFFICAVERAGE = strtod(request.params[0].get_str().c_str(), NULL);;
     }
 
     Object result;
     result.push_back(Pair("trafficavg-floodingwallet", FIREWALL_FLOODINGWALLET_MAXTRAFFICAVERAGE));
 
-return result;
+    return result;
 }
 
 
-Value firewallfloodingwalletmincheck(const Array& params, bool fHelp)
+UniValue firewallfloodingwalletmincheck(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallfloodingwalletmincheck \"seconds\"\n"
                             "\nBitcoin Firewall Ban Time Flooding Wallet Rule #4\n"
@@ -2291,21 +2262,21 @@ Value firewallfloodingwalletmincheck(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallfloodingwalletmincheck", "10000000")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_FLOODINGWALLET_MINCHECK = (int)strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_FLOODINGWALLET_MINCHECK = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
     Object result;
     result.push_back(Pair("mincheck-floodingwallet", FIREWALL_FLOODINGWALLET_MINCHECK));
 
-return result;
+    return result;
 }
 
 
-Value firewallfloodingwalletmaxcheck(const Array& params, bool fHelp)
+UniValue firewallfloodingwalletmaxcheck(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() == 0)
+    if (request.fHelp || request.params.size() == 0)
         throw runtime_error(
                             "firewallfloodingwalletmaxcheck \"seconds\"\n"
                             "\nBitcoin Firewall Max Check Flooding Wallet Rule #4\n"
@@ -2317,14 +2288,14 @@ Value firewallfloodingwalletmaxcheck(const Array& params, bool fHelp)
                             + HelpExampleCli("firewallfloodingwalletmaxcheck", "10000000")
                             );
 
-    if (params.size() == 1)
+    if (request.params.size() == 1)
     {
-        FIREWALL_FLOODINGWALLET_MAXCHECK = (int)strtod(params[0].get_str().c_str(), NULL);
+        FIREWALL_FLOODINGWALLET_MAXCHECK = (int)strtod(request.params[0].get_str().c_str(), NULL);
     }
 
     Object result;
     result.push_back(Pair("maxcheck-floodingwallet", FIREWALL_FLOODINGWALLET_MAXCHECK));
 
-return result;
+    return result;
 }
 */

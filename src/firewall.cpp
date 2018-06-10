@@ -42,8 +42,7 @@ int CountStringArray(std::string *ArrayName)
         tmp_cnt++;
     }
 
-
-return tmp_cnt;
+    return tmp_cnt;
 }
 
 
@@ -58,7 +57,7 @@ int CountIntArray(int *ArrayName)
         tmp_cnt++;
     }
 
-return tmp_cnt;
+    return tmp_cnt;
 }
 
 
@@ -66,7 +65,7 @@ return tmp_cnt;
 std::string ModuleName = "[Bitcoin Firewall 1.3.0]";
 
 // *** Firewall Controls (General) ***
-bool FIREWALL_ENABLED = true;
+bool FIREWALL_ENABLED = false;
 bool FIREWALL_CLEAR_BLACKLIST = false;
 bool FIREWALL_CLEAR_BANS = true;
 int FIREWALL_CLEARBANS_MINNODES = 5;
@@ -270,13 +269,12 @@ bool ForceDisconnectNode(CNode *pnode, string FromFunction)
         // Trigger Disconnection using CConnman::ThreadSocketHandler()
         pnode->fDisconnect = true;
 
+        // Disconnecting Node success
         return true;
     }
-    else
-    {
-        return false;
-    }
 
+    // Disconnecting Node failed
+    return false;
 }
 
 
@@ -310,34 +308,36 @@ bool AddToBlackList(CNode *pnode, string FromFunction)
     int TmpBlackListCount;
     TmpBlackListCount = CountStringArray(FIREWALL_BLACKLIST);
 
-        // Restart Blacklist count
-        if (TmpBlackListCount >  255)
-        {
-            TmpBlackListCount = 0;
-        }
+    // Restart Blacklist count
+    if (TmpBlackListCount >  255)
+    {
+        TmpBlackListCount = 0;
+    }
 
-        if (CheckBlackList(pnode) == false)
-        {
-            // increase Blacklist count
-            TmpBlackListCount = TmpBlackListCount + 1;
-            // Add node IP to blacklist
-            FIREWALL_BLACKLIST[TmpBlackListCount] = pnode->addr.ToString();
+    if (CheckBlackList(pnode) == false)
+    {
+        // increase Blacklist count
+        TmpBlackListCount = TmpBlackListCount + 1;
+        // Add node IP to blacklist
+        FIREWALL_BLACKLIST[TmpBlackListCount] = pnode->addr.ToString();
 
-            if (FIREWALL_LIVE_DEBUG == true)
+        if (FIREWALL_LIVE_DEBUG == true)
+        {
+            if (FIREWALL_LIVEDEBUG_BLACKLIST == true)
             {
-                if (FIREWALL_LIVEDEBUG_BLACKLIST == true)
-                {
-                    cout << ModuleName << "-" << FromFunction << " Blacklisted: " << pnode->addr.ToString() << " Masternode: " << pnode->fMasternode << "]\n" << endl;
-                }
+                cout << ModuleName << "-" << FromFunction << " Blacklisted: " << pnode->addr.ToString() << " Masternode: " << pnode->fMasternode << "]\n" << endl;
             }
-
-            // Append Blacklist to debug.log
-            LogPrintf("%s -%s- Blacklisted: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
-                ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode);
-
-            return true;
         }
 
+        // Append Blacklist to debug.log
+        LogPrintf("%s -%s- Blacklisted: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
+            ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode);
+
+        // Blacklisted IP found
+        return true;
+    }
+
+    // Blacklisted IP not found
     return false;
 }
 
@@ -946,7 +946,7 @@ bool CheckAttack(CNode *pnode, string FromFunction)
 
         if (FIREWALL_LIVE_DEBUG == true)
         {
-            cout << ModuleName << "-" << FromFunction << " [Checking: " << pnode->addr.ToString() << "] [Masternode: " << pnode->fMasternode << "] [Attacks: " << ATTACK_CHECK_LOG << "\n" << endl;
+            cout << ModuleName << "-" << FromFunction << " [Checking: " << pnode->addr.ToString() << "] [Masternode: " << pnode->fMasternode << "] [Attacks:" << ATTACK_CHECK_LOG << "\n" << endl;
         }
 
     // ----------------
@@ -994,25 +994,25 @@ bool CheckAttack(CNode *pnode, string FromFunction)
 // * Function: Examination *
 void Examination(CNode *pnode, string FromFunction)
 {
-// Calculate new Height Average from all peers connected
-
     bool UpdateNodeStats = false;
     int NodeHeight;
 
+    // Find Node SyncHeight or StartingHeight
     if (pnode->nSyncHeight == 0)
     {
         NodeHeight = pnode->nStartingHeight;
     }
     else
-    {
-        NodeHeight = pnode->nSyncHeight;
+    {   // If StartHeight is bigger than Sync use that instead
+        if (pnode->nSyncHeight < pnode->nStartingHeight)
+        {
+            NodeHeight = pnode->nStartingHeight;
+        }
+        else
+        {
+            NodeHeight = pnode->nSyncHeight;
+        }
     }
-
-    if (pnode->nSyncHeight < pnode->nStartingHeight)
-    {
-        NodeHeight = pnode->nStartingHeight;
-    }
-
 
     // ** Update current average if increased ****
     if (NodeHeight > Firewall_AverageHeight) 
@@ -1070,6 +1070,7 @@ void Examination(CNode *pnode, string FromFunction)
 
         }
 
+    // Check Node for Attack Patterns
     CheckAttack(pnode, FromFunction);
     }
 }
@@ -1086,6 +1087,7 @@ bool FireWall(CNode *pnode, string FromFunction)
 
     if (FIREWALL_ENABLED == false)
     {
+        // Firewall disabled
         return false;
     }
 
@@ -1101,14 +1103,16 @@ bool FireWall(CNode *pnode, string FromFunction)
             // Check for Static Whitelisted Seed Node
             if (pnode->addr.ToString() == FIREWALL_WHITELIST[i])
             {
+                // Node is firewall_whitelisted
                 return false;
             }
         }
     }
 
-    // Check for Node Whitelisted status
+    // Check for Node Global Whitelisted status
     if (pnode->fWhitelisted == true)
     {
+        // Node is Global Whitelisted
         return false;
     }
 
@@ -1117,12 +1121,14 @@ bool FireWall(CNode *pnode, string FromFunction)
 
         if (FIREWALL_CLEARBANS_MINNODES <= (int)g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL))
         {
-            
+            // Clear all Nodes banned
             g_connman->ClearBanned();
 
+            // Clear all Nodes blacklisted
             int TmpBlackListCount;
             TmpBlackListCount = CountStringArray(FIREWALL_BLACKLIST);
             std::fill_n(FIREWALL_BLACKLIST, TmpBlackListCount, 0);
+
                 LogPrintf("%s -%s- Cleared Ban: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
                     ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode
                 );
