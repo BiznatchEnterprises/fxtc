@@ -512,6 +512,10 @@ void FindNextBlocksToDownload(NodeId nodeid, unsigned int count, std::vector<con
     int nMaxHeight = std::min<int>(state->pindexBestKnownBlock->nHeight, nWindowEnd + 1);
 
     // Firewall Node SyncHeight
+    // Look for an existing connection
+    //CNode* pnode = FindNode((CService)addrConnect);
+    //if (pnode)
+    //{
     // Cnode *pnode = FIndNode(nodeid);
     // pnode->nSyncheight = nMaxHeight;   
     

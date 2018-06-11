@@ -32,7 +32,7 @@ inline const char * const BoolToString(bool b)
 
 
 // * Function: CountArray *
-int CountStringArray(std::string *ArrayName)
+int CountStringArray(string *ArrayName)
 {
     int tmp_cnt;
     tmp_cnt = 0;
@@ -72,7 +72,7 @@ double FIREWALL_TRAFFIC_TOLERANCE = 0.0001; // Reduce for minimal fluctuation
 double FIREWALL_TRAFFIC_ZONE = 4; // + or - Traffic Range 
 
 // *** Firewall Debug (Live Output) ***
-bool FIREWALL_LIVE_DEBUG = true;
+bool FIREWALL_LIVE_DEBUG = false;
 bool FIREWALL_LIVEDEBUG_EXAM = true;
 bool FIREWALL_LIVEDEBUG_BANS = true;
 bool FIREWALL_LIVEDEBUG_BLACKLIST = true;
@@ -147,13 +147,13 @@ int FIREWALL_FLOODINGWALLET_MINCHECK = 30; // seconds
 int FIREWALL_FLOODINGWALLET_MAXCHECK = 90; // seconds
 
 // Firewall Whitelist (ignore)
-std::string FIREWALL_WHITELIST[256] =
+string FIREWALL_WHITELIST[256] =
 {
 
 };
 
 // * Firewall BlackList Settings *
-std::string FIREWALL_BLACKLIST[256] =
+string FIREWALL_BLACKLIST[256] =
 {
 
 };
@@ -170,7 +170,7 @@ int Firewall_AverageSend = 0;
 int Firewall_AverageRecv = 0;
 int ALL_CHECK_TIMER = GetTime();
 
-// * Function: LoadFirewallSettings (fxtc.conf)*
+// * Function: LoadFirewallSettings (CMDLine or .conf)*
 void LoadFirewallSettings()
 {
     // *** Firewall Controls (General) ***
@@ -276,6 +276,30 @@ bool ForceDisconnectNode(CNode *pnode, string FromFunction)
     return false;
 }
 
+// * Function: CheckWhiteList *
+bool CheckWhiteList(CNode *pnode)
+{
+    int i;
+    int TmpWhiteListCount;
+    TmpWhiteListCount = CountStringArray(FIREWALL_WHITELIST);
+
+    return false;
+
+    if (TmpWhiteListCount > 0)
+    {
+        for (i = 0; i < TmpWhiteListCount; i++)
+        {  
+            if (pnode->addr.ToString() == FIREWALL_WHITELIST[i])
+            {   
+                // Whitelisted IP FOUND!
+                return true;
+            }
+        }
+    }
+
+    // Whitelisted IP not found
+    return false;
+}
 
 // * Function: CheckBlackList *
 bool CheckBlackList(CNode *pnode)
@@ -283,6 +307,8 @@ bool CheckBlackList(CNode *pnode)
     int i;
     int TmpBlackListCount;
     TmpBlackListCount = CountStringArray(FIREWALL_BLACKLIST);
+
+    return false;
 
     if (TmpBlackListCount > 0)
     {
@@ -1077,63 +1103,62 @@ void Examination(CNode *pnode, string FromFunction)
 // * Function: FireWall *
 bool FireWall(CNode *pnode, string FromFunction)
 {
+    if (!pnode)
+    {
+        // Invalid Node
+        return false;
+    }
 
     if (Firewall_FirstRun == false)
     {
+        // Load settings from CmdLine Args or .conf
         Firewall_FirstRun = true;
         LoadFirewallSettings();
     }
-
+    
     if (FIREWALL_ENABLED == false)
     {
         // Firewall disabled
         return false;
     }
 
-    int i;
-    int TmpWhiteListCount;
-
-    TmpWhiteListCount = CountStringArray(FIREWALL_WHITELIST);
-
-    if (TmpWhiteListCount > 0)
+    if (CheckWhiteList(pnode) == true)
     {
-        for (i = 0; i < TmpWhiteListCount; i++)
-        {  
-            // Check for Static Whitelisted Seed Node
-            if (pnode->addr.ToString() == FIREWALL_WHITELIST[i])
-            {
-                // Node is firewall_whitelisted
-                return false;
-            }
-        }
+        // Skip Firewall Analysis
+        return false;
     }
-
+    
     // Check for Node Global Whitelisted status
     if (pnode->fWhitelisted == true)
     {
         // Node is Global Whitelisted
         return false;
     }
-
+   
     if (FIREWALL_CLEAR_BANS == true)
     {
-
-        if (FIREWALL_CLEARBANS_MINNODES <= (int)g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL))
+        if (pnode->nTimeConnected > 90)
         {
-            // Clear all Nodes banned
-            g_connman->ClearBanned();
+            if (FIREWALL_CLEARBANS_MINNODES <= (int)g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL))
+            {
+                // Clear all Nodes banned
+                g_connman->ClearBanned();
 
-            // Clear all Nodes blacklisted
-            int TmpBlackListCount;
-            TmpBlackListCount = CountStringArray(FIREWALL_BLACKLIST);
-            std::fill_n(FIREWALL_BLACKLIST, TmpBlackListCount, 0);
+                // Clear all Nodes blacklisted
+                int TmpBlackListCount;
+                TmpBlackListCount = CountStringArray(FIREWALL_BLACKLIST);
 
-                LogPrintf("%s -%s- Cleared Ban: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
-                    ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode
-                );
+                if (TmpBlackListCount > 0)
+                {
+                    string FIREWALL_BLACKLIST[256];
+                }
+                    LogPrintf("%s -%s- Cleared Ban: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
+                        ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode
+                    );
+            }
         }
     }
-
+    
     if (CheckBlackList(pnode) == true)
     {
         FromFunction = "CheckBlackList";
@@ -1152,8 +1177,8 @@ bool FireWall(CNode *pnode, string FromFunction)
     {
         FromFunction = "CheckBanned";
 
-        LogPrintf("%s -%s- Node/Peer Already Banned: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
-            ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode
+        LogPrintf("%s -%s- Node/Peer Already Banned: addr=%s fNetworkNode=%d fInbound=%d fMasternode=%d\n",
+            ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode
         );
 
         // Peer/Node Panic Disconnect
@@ -1161,9 +1186,12 @@ bool FireWall(CNode *pnode, string FromFunction)
         return true;
 
     }
+    
+
 
     // Perform a Node consensus examination
     Examination(pnode, FromFunction);
+ 
 
     // Peer/Node Safe    
     return false;
