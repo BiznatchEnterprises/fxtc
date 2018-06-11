@@ -71,7 +71,7 @@ double FIREWALL_TRAFFIC_TOLERANCE = 0.0001; // Reduce for minimal fluctuation
 double FIREWALL_TRAFFIC_ZONE = 4; // + or - Traffic Range 
 
 // *** Firewall Debug (Live Output) ***
-bool FIREWALL_LIVE_DEBUG = true;
+bool FIREWALL_LIVE_DEBUG = false;
 bool FIREWALL_LIVEDEBUG_EXAM = true;
 bool FIREWALL_LIVEDEBUG_BANS = true;
 bool FIREWALL_LIVEDEBUG_DISCONNECT = true;

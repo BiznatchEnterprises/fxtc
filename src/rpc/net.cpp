@@ -633,29 +633,6 @@ UniValue setnetworkactive(const JSONRPCRequest& request)
     return g_connman->GetNetworkActive();
 }
 
-static const CRPCCommand commands[] =
-{ //  category              name                      actor (function)         argNames
-  //  --------------------- ------------------------  -----------------------  ----------
-    { "network",            "getconnectioncount",     &getconnectioncount,     {} },
-    { "network",            "ping",                   &ping,                   {} },
-    { "network",            "getpeerinfo",            &getpeerinfo,            {} },
-    { "network",            "addnode",                &addnode,                {"node","command"} },
-    { "network",            "disconnectnode",         &disconnectnode,         {"address", "nodeid"} },
-    { "network",            "getaddednodeinfo",       &getaddednodeinfo,       {"node"} },
-    { "network",            "getnettotals",           &getnettotals,           {} },
-    { "network",            "getnetworkinfo",         &getnetworkinfo,         {} },
-    { "network",            "setban",                 &setban,                 {"subnet", "command", "bantime", "absolute"} },
-    { "network",            "listbanned",             &listbanned,             {} },
-    { "network",            "clearbanned",            &clearbanned,            {} },
-    { "network",            "setnetworkactive",       &setnetworkactive,       {"state"} },
-};
-
-void RegisterNetRPCCommands(CRPCTable &t)
-{
-    for (unsigned int vcidx = 0; vcidx < ARRAYLEN(commands); vcidx++)
-        t.appendCommand(commands[vcidx].name, &commands[vcidx]);
-}
-
 
 UniValue firewallstatus(const JSONRPCRequest& request)
 {
@@ -2007,4 +1984,69 @@ UniValue firewallfloodingwalletmaxcheck(const JSONRPCRequest& request)
     result.push_back(Pair("maxcheck-floodingwallet", FIREWALL_FLOODINGWALLET_MAXCHECK));
 
     return result;
+}
+
+static const CRPCCommand commands[] =
+{ //  category              name                                                  actor (function)                                     argNames
+  //  --------------------- ----------------------------------------------------- ---------------------------------------------------  ----------
+    { "network",            "getconnectioncount",                                 &getconnectioncount,                                 {} },
+    { "network",            "ping",                                               &ping,                                               {} },
+    { "network",            "getpeerinfo",                                        &getpeerinfo,                                        {} },
+    { "network",            "addnode",                                            &addnode,                                            {"node","command"} },
+    { "network",            "disconnectnode",                                     &disconnectnode,                                     {"address", "nodeid"} },
+    { "network",            "getaddednodeinfo",                                   &getaddednodeinfo,                                   {"node"} },
+    { "network",            "getnettotals",                                       &getnettotals,                                       {} },
+    { "network",            "getnetworkinfo",                                     &getnetworkinfo,                                     {} },
+    { "network",            "setban",                                             &setban,                                             {"subnet", "command", "bantime", "absolute"} },
+    { "network",            "listbanned",                                         &listbanned,                                         {} },
+    { "network",            "clearbanned",                                        &clearbanned,                                        {} },
+    { "network",            "setnetworkactive",                                   &setnetworkactive,                                   {"state"} },
+    { "network",            "firewallstatus",                                     &firewallstatus,                                     {} },
+    { "network",            "firewallenabled",                                    &firewallenabled,                                    {"state"} },
+    { "network",            "firewallclearbanlist",                               &firewallclearbanlist,                               {"state"} }, 
+    { "network",            "firewalldebug",                                      &firewalldebug,                                      {"state"} },
+    { "network",            "firewalldebugexam",                                  &firewalldebugexam,                                  {"state"} },
+    { "network",            "firewalldebugexambans",                              &firewalldebugexambans,                              {"state"} },
+    { "network",            "firewalldebugdisconnect",                            &firewalldebugdisconnect,                            {"state"} },
+    { "network",            "firewalldebugbandwidthabuse",                        &firewalldebugbandwidthabuse,                        {"state"} },
+    { "network",            "firewalldebugnofalsepositivebandwidthabuse",         &firewalldebugnofalsepositivebandwidthabuse,         {"state"} },
+    { "network",            "firewalldebuginvalidwallet",                         &firewalldebuginvalidwallet,                         {"state"} },
+    { "network",            "firewalldebugfloodingwallet",                        &firewalldebugfloodingwallet,                        {"state"} },
+    { "network",            "firewallaveragetolerance",                           &firewallaveragetolerance,                           {"tolerance"} },
+    { "network",            "firewallaveragerange",                               &firewallaveragerange,                               {"state"} },
+    { "network",            "firewalltraffictolerance",                           &firewalltraffictolerance,                           {"tolerance"} },
+    { "network",            "firewalltrafficzone",                                &firewalltrafficzone,                                {"zone"} },
+    { "network",            "firewalldetectbandwidthabuse",                       &firewalldetectbandwidthabuse,                       {"state"} },
+    { "network",            "firewallnofalsepositivebandwidthabuse",              &firewallnofalsepositivebandwidthabuse,              {"state""state"} },
+    { "network",            "firewallbantimebandwidthabuse",                      &firewallbantimebandwidthabuse,                      {"seconds"} },
+    { "network",            "firewallbandwidthabusemaxcheck",                     &firewallbandwidthabusemaxcheck,                     {"seconds"} },
+    { "network",            "firewallbandwidthabuseminattack",                    &firewallbandwidthabuseminattack,                    {"ratio"} },
+    { "network",            "firewallbandwidthabusemaxattack",                    &firewallbandwidthabusemaxattack,                    {"ratio"} },
+    { "network",            "firewalldetectinvalidwallet",                        &firewalldetectinvalidwallet,                        {"state"} },
+    { "network",            "firewallbaninvalidwallet",                           &firewallbaninvalidwallet,                           {"state"} },
+    { "network",            "firewallbantimeinvalidwallet",                       &firewallbantimeinvalidwallet,                       {"seconds"} },
+    { "network",            "firewallinvalidwalletminprotocol",                   &firewallinvalidwalletminprotocol,                   {"state"} },
+    { "network",            "firewallinvalidwalletmaxcheck",                      &firewallinvalidwalletmaxcheck,                      {"state"} },
+    { "network",            "firewallforkedwalletnodeheight",                     &firewallforkedwalletnodeheight,                     {"height"} },
+    { "network",            "firewalldetectforkedwallet",                         &firewalldetectforkedwallet,                         {"state"} },
+    { "network",            "firewallbanforkedwallet",                            &firewallbanforkedwallet,                            {"state"} },
+    { "network",            "firewallbantimeforkedwallet",                        &firewallbantimeforkedwallet,                        {"seconds"} },
+    { "network",            "firewalldetectfloodingwallet",                       &firewalldetectfloodingwallet,                       {"state"} },
+    { "network",            "firewallbanfloodingwallet",                          &firewallbanfloodingwallet,                          {"state"} },
+    { "network",            "firewallbantimefloodingwallet",                      &firewallbantimefloodingwallet,                      {"seconds"} },
+    { "network",            "firewallfloodingwalletminbytes",                     &firewallfloodingwalletminbytes,                     {"bytes"} },
+    { "network",            "firewallfloodingwalletmaxbytes",                     &firewallfloodingwalletmaxbytes,                     {"bytes"} },
+    { "network",            "firewallfloodingwalletattackpatternadd",             &firewallfloodingwalletattackpatternadd,             {"warnings"} },
+    { "network",            "firewallfloodingwalletattackpatternremove",          &firewallfloodingwalletattackpatternremove,          {"warnings"} },
+    { "network",            "firewallfloodingwalletmintrafficavg",                &firewallfloodingwalletmintrafficavg,                {"ratio"} },
+    { "network",            "firewallfloodingwalletmaxtrafficavg",                &firewallfloodingwalletmaxtrafficavg,                {"ratio"} },
+    { "network",            "firewallfloodingwalletmincheck",                     &firewallfloodingwalletmincheck,                     {"seconds"} },
+    { "network",            "firewallfloodingwalletmaxcheck",                     &firewallfloodingwalletmaxcheck,                     {"seconds"} },
+
+};
+
+void RegisterNetRPCCommands(CRPCTable &t)
+{
+    for (unsigned int vcidx = 0; vcidx < ARRAYLEN(commands); vcidx++)
+        t.appendCommand(commands[vcidx].name, &commands[vcidx]);
 }
