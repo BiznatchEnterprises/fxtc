@@ -65,7 +65,6 @@ std::string ModuleName = "[Bitcoin Firewall 1.3.0]";
 
 // *** Firewall Controls (General) ***
 bool FIREWALL_ENABLED = true;
-//bool FIREWALL_CLEAR_BLACKLIST = false;
 bool FIREWALL_CLEAR_BANS = false;
 int FIREWALL_CLEARBANS_MINNODES = 1;
 double FIREWALL_TRAFFIC_TOLERANCE = 0.0001; // Reduce for minimal fluctuation
@@ -75,7 +74,6 @@ double FIREWALL_TRAFFIC_ZONE = 4; // + or - Traffic Range
 bool FIREWALL_LIVE_DEBUG = false;
 bool FIREWALL_LIVEDEBUG_EXAM = true;
 bool FIREWALL_LIVEDEBUG_BANS = true;
-//bool FIREWALL_LIVEDEBUG_BLACKLIST = true;
 bool FIREWALL_LIVEDEBUG_DISCONNECT = true;
 bool FIREWALL_LIVEDEBUG_BANDWIDTHABUSE = true;
 bool FIREWALL_LIVEDEBUG_NOFALSEPOSITIVE = true;
@@ -85,23 +83,19 @@ bool FIREWALL_LIVEDEBUG_FLOODINGWALLET = true;
 
 // *** Firewall Controls (Bandwidth Abuse) ***
 bool FIREWALL_DETECT_BANDWIDTHABUSE = true;
-//bool FIREWALL_BLACKLIST_BANDWIDTHABUSE = true;
 bool FIREWALL_BAN_BANDWIDTHABUSE = true;
 bool FIREWALL_NOFALSEPOSITIVE_BANDWIDTHABUSE = true;
 
 // *** Firewall Controls (Invalid Peer Wallets) ***
 bool FIREWALL_DETECT_INVALIDWALLET = true;
-bool FIREWALL_BLACKLIST_INVALIDWALLET = true;
 bool FIREWALL_BAN_INVALIDWALLET = true;
 
 // *** Firewall Controls (Forked Peer Wallets) ***
 bool FIREWALL_DETECT_FORKEDWALLET = true;
-//bool FIREWALL_BLACKLIST_FORKEDWALLET = true;
 bool FIREWALL_BAN_FORKEDWALLET = true;
 
 // *** Firewall Controls (Flooding Peer Wallets) ***
 bool FIREWALL_DETECT_FLOODINGWALLET = true;
-//bool FIREWALL_BLACKLIST_FLOODINGWALLET = true;
 bool FIREWALL_BAN_FLOODINGWALLET = true;
 
 // * Firewall Settings (General) *
@@ -146,18 +140,6 @@ double FIREWALL_FLOODINGWALLET_MAXTRAFFICAVERAGE = 2000; // Ratio Up/Down
 int FIREWALL_FLOODINGWALLET_MINCHECK = 30; // seconds
 int FIREWALL_FLOODINGWALLET_MAXCHECK = 90; // seconds
 
-// Firewall Whitelist (ignore)
-//string FIREWALL_WHITELIST[256] =
-//{
-
-//};
-
-// * Firewall BlackList Settings *
-//string FIREWALL_BLACKLIST[256] =
-//{
-
-//};
-
 // * Global Firewall Variables *
 bool Firewall_FirstRun = false;
 int Firewall_AverageHeight = 0;
@@ -175,14 +157,12 @@ void LoadFirewallSettings()
 {
     // *** Firewall Controls (General) ***
     FIREWALL_ENABLED = gArgs.GetBoolArg("-firewallenabled", FIREWALL_ENABLED);
-    //FIREWALL_CLEAR_BLACKLIST = gArgs.GetBoolArg("-firewallclearblacklist", FIREWALL_CLEAR_BLACKLIST);
     FIREWALL_CLEAR_BANS = gArgs.GetBoolArg("-firewallclearbanlist", FIREWALL_CLEAR_BANS);
 
     // *** Firewall Debug (Live Output) ***
     FIREWALL_LIVE_DEBUG = gArgs.GetBoolArg("-firewalldebug", FIREWALL_LIVE_DEBUG);
     FIREWALL_LIVEDEBUG_EXAM = gArgs.GetBoolArg("-firewalldebugexam", FIREWALL_LIVEDEBUG_EXAM);
     FIREWALL_LIVEDEBUG_BANS = gArgs.GetBoolArg("-firewalldebugbans", FIREWALL_LIVEDEBUG_BANS);
-    //FIREWALL_LIVEDEBUG_BLACKLIST = gArgs.GetBoolArg("-firewalldebugblacklist", FIREWALL_LIVEDEBUG_BLACKLIST);
     FIREWALL_LIVEDEBUG_DISCONNECT = gArgs.GetBoolArg("-firewalldebugdisconnect", FIREWALL_LIVEDEBUG_DISCONNECT);
     FIREWALL_LIVEDEBUG_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewalldebugbandwidthabuse", FIREWALL_LIVEDEBUG_BANDWIDTHABUSE);
     FIREWALL_LIVEDEBUG_NOFALSEPOSITIVE = gArgs.GetBoolArg("-firewalldebugnofalsepositivebandwidthabuse", FIREWALL_LIVEDEBUG_NOFALSEPOSITIVE);
@@ -192,23 +172,19 @@ void LoadFirewallSettings()
 
     // *** Firewall Controls (Bandwidth Abuse) ***
     FIREWALL_DETECT_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewalldetectbandwidthabuse", FIREWALL_DETECT_BANDWIDTHABUSE);
-    //FIREWALL_BLACKLIST_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewallblacklistbandwidthabuse", FIREWALL_BLACKLIST_BANDWIDTHABUSE);
     FIREWALL_BAN_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewallbanbandwidthabuse", FIREWALL_BAN_BANDWIDTHABUSE);
     FIREWALL_NOFALSEPOSITIVE_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewallnofalsepositivebandwidthabuse", FIREWALL_NOFALSEPOSITIVE_BANDWIDTHABUSE);
 
     // *** Firewall Controls (Invalid Peer Wallets) ***
     FIREWALL_DETECT_INVALIDWALLET = gArgs.GetBoolArg("-firewalldetectinvalidwallet", FIREWALL_DETECT_INVALIDWALLET);
-    //FIREWALL_BLACKLIST_INVALIDWALLET = gArgs.GetBoolArg("-firewallblacklistinvalidwallet", FIREWALL_BLACKLIST_INVALIDWALLET);
     FIREWALL_BAN_INVALIDWALLET = gArgs.GetBoolArg("-firewallbaninvalidwallet", FIREWALL_BAN_INVALIDWALLET);
 
     // *** Firewall Controls (Forked Peer Wallets) ***
     FIREWALL_DETECT_FORKEDWALLET = gArgs.GetBoolArg("-firewalldetectforkedwallet", FIREWALL_DETECT_FORKEDWALLET);
-    //FIREWALL_BLACKLIST_FORKEDWALLET = gArgs.GetBoolArg("-firewallblacklistforkedwallet", FIREWALL_BLACKLIST_FORKEDWALLET);
     FIREWALL_BAN_FORKEDWALLET = gArgs.GetBoolArg("-firewallbanforkedwallet", FIREWALL_BAN_FORKEDWALLET);
 
     // *** Firewall Controls (Flooding Peer Wallets) ***
     FIREWALL_DETECT_FLOODINGWALLET = gArgs.GetBoolArg("-firewalldetectfloodingwallet", FIREWALL_DETECT_FLOODINGWALLET);
-    //FIREWALL_BLACKLIST_FLOODINGWALLET = gArgs.GetBoolArg("-firewallblacklistfloodingwallet", FIREWALL_BLACKLIST_FLOODINGWALLET);
     FIREWALL_BAN_FLOODINGWALLET = gArgs.GetBoolArg("-firewallbanfloodingwallet", FIREWALL_BAN_FLOODINGWALLET);
 
     // * Firewall Settings (Exam) *
@@ -276,100 +252,6 @@ bool ForceDisconnectNode(CNode *pnode, string FromFunction)
     return false;
 }
 
-/*
-// * Function: CheckWhiteList *
-bool CheckWhiteList(CNode *pnode)
-{
-    int i;
-    int TmpWhiteListCount;
-    TmpWhiteListCount = CountStringArray(FIREWALL_WHITELIST);
-
-    return false;
-
-    if (TmpWhiteListCount > 0)
-    {
-        for (i = 0; i < TmpWhiteListCount; i++)
-        {  
-            if (pnode->addr.ToString() == FIREWALL_WHITELIST[i])
-            {   
-                // Whitelisted IP FOUND!
-                return true;
-            }
-        }
-    }
-
-    // Whitelisted IP not found
-    return false;
-}
-*/
-
-/*
-// * Function: CheckBlackList *
-bool CheckBlackList(CNode *pnode)
-{
-    int i;
-    int TmpBlackListCount;
-    TmpBlackListCount = CountStringArray(FIREWALL_BLACKLIST);
-
-    return false;
-
-    if (TmpBlackListCount > 0)
-    {
-        for (i = 0; i < TmpBlackListCount; i++)
-        {  
-            if (pnode->addr.ToString() == FIREWALL_BLACKLIST[i])
-            {   
-                // Banned IP FOUND!
-                return true;
-            }
-        }
-    }
-
-    // Banned IP not found
-    return false;
-}
-*/
-
-/*
-// * Function: AddToBlackList *
-bool AddToBlackList(CNode *pnode, string FromFunction)
-{
-    int TmpBlackListCount;
-    TmpBlackListCount = CountStringArray(FIREWALL_BLACKLIST);
-
-    // Restart Blacklist count
-    if (TmpBlackListCount >  255)
-    {
-        TmpBlackListCount = 0;
-    }
-
-    if (CheckBlackList(pnode) == false)
-    {
-        // increase Blacklist count
-        TmpBlackListCount = TmpBlackListCount + 1;
-        // Add node IP to blacklist
-        FIREWALL_BLACKLIST[TmpBlackListCount] = pnode->addr.ToString();
-
-        if (FIREWALL_LIVE_DEBUG == true)
-        {
-            if (FIREWALL_LIVEDEBUG_BLACKLIST == true)
-            {
-                cout << ModuleName << "-" << FromFunction << " Blacklisted: " << pnode->addr.ToString() << " Masternode: " << pnode->fMasternode << "]\n" << endl;
-            }
-        }
-
-        // Append Blacklist to debug.log
-        LogPrintf("%s -%s- Blacklisted: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
-            ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode);
-
-        // Blacklisted IP found
-        return true;
-    }
-
-    // Blacklisted IP not found
-    return false;
-}
-*/
 
 // * Function:  *
 bool CheckBanned(CNode *pnode)
@@ -410,7 +292,6 @@ bool AddToBanList(CNode *pnode, BanReason BAN_REASON, int BAN_TIME, string FromF
 bool CheckAttack(CNode *pnode, string FromFunction)
 {
     bool DETECTED_ATTACK = false;    
-    bool BLACKLIST_ATTACK = false;
 
     int BAN_TIME = 0; // Default 24 hours
     bool BAN_ATTACK = false;
@@ -499,11 +380,6 @@ bool CheckAttack(CNode *pnode, string FromFunction)
         // ### Attack Mitigation ###
         if (DETECTED_ATTACK == true)
         {
-            if (FIREWALL_BLACKLIST_BANDWIDTHABUSE == true)
-            {
-                BLACKLIST_ATTACK = true;
-            }
-
             if (FIREWALL_BAN_BANDWIDTHABUSE == true)
             {
                 BAN_ATTACK = true;
@@ -587,7 +463,7 @@ bool CheckAttack(CNode *pnode, string FromFunction)
             // Check for -1 blockheight
             if (pnode->nStartingHeight == -1)
             {
-                // Trigger Blacklisting
+                // Trigger Invalid Wallet
                 DETECTED_ATTACK = true;
                 ATTACK_TYPE = "1-StartHeight-Invalid";
             }
@@ -599,7 +475,7 @@ bool CheckAttack(CNode *pnode, string FromFunction)
             // Check for -1 blockheight
             if (pnode->nStartingHeight < 0)
             {
-                // Trigger Blacklisting
+                // Trigger Invalid Wallet
                 DETECTED_ATTACK = true;
                 ATTACK_TYPE = "1-StartHeight-Invalid";
             }
@@ -612,7 +488,7 @@ bool CheckAttack(CNode *pnode, string FromFunction)
             // Check for 0 protocol
             if (pnode->nRecvVersion == 0)
             {
-                // Trigger Blacklisting
+                // Trigger Invalid Wallet
                 DETECTED_ATTACK = true;
                 ATTACK_TYPE = "1-Protocol-Invalid";
             }
@@ -625,7 +501,7 @@ bool CheckAttack(CNode *pnode, string FromFunction)
             // Check for 
             if (pnode->nRecvVersion < 1)
             {
-                // Trigger Blacklisting
+                // Trigger Invalid Wallet
                 DETECTED_ATTACK = true;
                 ATTACK_TYPE = "1-Protocol-Invalid";
             }
@@ -641,7 +517,7 @@ bool CheckAttack(CNode *pnode, string FromFunction)
 
             //if (pnode->nSyncHeight < pnode->nSyncHeightOld - FIREWALL_AVERAGE_RANGE)
             //{
-                // Trigger Blacklisting
+                // Trigger Invalid Wallet
                 //DETECTED = true;
                 //ATTACK_TYPE = "1-SyncReset";
             //}
@@ -657,11 +533,6 @@ bool CheckAttack(CNode *pnode, string FromFunction)
         // ### Attack Mitigation ###
         if (DETECTED_ATTACK == true)
         {
-            if (FIREWALL_BLACKLIST_INVALIDWALLET == true)
-            {
-                BLACKLIST_ATTACK = true;
-            }
-
             if (FIREWALL_BAN_INVALIDWALLET == true)
             {
                 BAN_ATTACK = true;
@@ -716,11 +587,6 @@ bool CheckAttack(CNode *pnode, string FromFunction)
         // ### Attack Mitigation ###
         if (DETECTED_ATTACK == true)
         {
-            if (FIREWALL_BLACKLIST_FORKEDWALLET == true)
-            {
-                BLACKLIST_ATTACK = true;
-            }
-
             if (FIREWALL_BAN_FORKEDWALLET == true)
             {
                 BAN_ATTACK = true;
@@ -932,11 +798,6 @@ bool CheckAttack(CNode *pnode, string FromFunction)
 
         if (DETECTED_ATTACK == true)
         {
-            if (FIREWALL_BLACKLIST_FLOODINGWALLET == true)
-            {
-                BLACKLIST_ATTACK = true;
-            }
-
             if (FIREWALL_BAN_FLOODINGWALLET == true)
             {
                 BAN_ATTACK = true;
@@ -958,11 +819,6 @@ bool CheckAttack(CNode *pnode, string FromFunction)
 
         //if (DETECTED_ATTACK == true)
         //{
-            //if (BLACKLIST_HIGH_BANSCORE == true)
-            //{
-                //BLACKLIST_ATTACK = true;
-            //}
-
             //if (BAN_HIGH_BANSCORE == true)
             //{
                 //BAN_ATTACK = true;
@@ -991,14 +847,6 @@ bool CheckAttack(CNode *pnode, string FromFunction)
             ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode,
             ATTACK_TYPE.c_str(), pnode->nTrafficRatio, pnode->nTrafficAverage, Firewall_AverageTraffic, pnode->nSendBytes, pnode->nRecvBytes, pnode->nSyncHeight, pnode->nRecvVersion
         );
-
-
-        // Blacklist IP on Attack detection
-        // * add node/peer IP to blacklist
-        if (BLACKLIST_ATTACK == true)
-        {
-            AddToBlackList(pnode, FromFunction);
-        }
 
         // Peer/Node Ban if required
         if (BAN_ATTACK == true)
@@ -1092,7 +940,7 @@ void Examination(CNode *pnode, string FromFunction)
             {
                 if (FIREWALL_LIVEDEBUG_EXAM == true)
                 {
-                    cout << ModuleName << "-" << " [BlackListed Nodes/Peers: " << CountStringArray(FIREWALL_BLACKLIST) << "] [Traffic: " << Firewall_AverageTraffic << "] [Traffic Min: " << Firewall_AverageTraffic_Min << "] [Traffic Max: " << Firewall_AverageTraffic_Max << "]" << " [Safe Height: " << Firewall_AverageHeight << "] [Height Min: " << Firewall_AverageHeight_Min << "] [Height Max: " << Firewall_AverageHeight_Max <<"] [Send Avrg: " << Firewall_AverageSend<< "] [Rec Avrg: " << Firewall_AverageRecv << "]\n" <<endl;
+                    cout << ModuleName << "-" << "] [Traffic: " << Firewall_AverageTraffic << "] [Traffic Min: " << Firewall_AverageTraffic_Min << "] [Traffic Max: " << Firewall_AverageTraffic_Max << "]" << " [Safe Height: " << Firewall_AverageHeight << "] [Height Min: " << Firewall_AverageHeight_Min << "] [Height Max: " << Firewall_AverageHeight_Max <<"] [Send Avrg: " << Firewall_AverageSend<< "] [Rec Avrg: " << Firewall_AverageRecv << "]\n" <<endl;
                     cout << ModuleName << "-" << FromFunction << " [Check Node: " << pnode->addr.ToString() << " ] [Masternode: " << pnode->fMasternode << "] [Node Traffic: " << pnode->nTrafficRatio << "] [Node Traffic Avrg: " << pnode->nTrafficAverage << "] [Traffic Avrg: " << Firewall_AverageTraffic << "] [Sent Bytes: " << pnode->nSendBytes << "] [Recv Bytes: " << pnode->nRecvBytes << "] [Sync Height: " << pnode->nSyncHeight << "] [Protocol: " << pnode->nRecvVersion << "\n" << endl;
                 }
             }
@@ -1150,40 +998,15 @@ bool FireWall(CNode *pnode, string FromFunction)
                 // Clear all Nodes banned
                 g_connman->ClearBanned();
 
-                // Clear all Nodes blacklisted
-                int TmpBlackListCount;
-                TmpBlackListCount = CountStringArray(FIREWALL_BLACKLIST);
-
-                if (TmpBlackListCount > 0)
-                {
-                    string FIREWALL_BLACKLIST[256];
-                }
                     LogPrintf("%s -%s- Cleared Ban: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
                         ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode
                     );
             }
         }
     }
-    
-    /*
-    if (CheckBlackList(pnode) == true)
-    {
-        FromFunction = "CheckBlackList";
-
-        LogPrintf("%s -%s- Node/Peer Already Blacklisted: addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
-            ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode
-        );
-
-        // Peer/Node Panic Disconnect
-        ForceDisconnectNode(pnode, FromFunction);
-        return true;
-
-    }
-    */
 
     // Perform a Node consensus examination
     Examination(pnode, FromFunction);
-
 
     // Peer/Node Safe    
     return false;
