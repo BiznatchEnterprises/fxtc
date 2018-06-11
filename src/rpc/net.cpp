@@ -669,12 +669,12 @@ UniValue firewallstatus(const JSONRPCRequest& request)
 
     UniValue result(UniValue::VOBJ);
     result.push_back(Pair("enabled", BoolToString(FIREWALL_ENABLED)));
-    result.push_back(Pair("clear-blacklist", BoolToString(FIREWALL_CLEAR_BLACKLIST)));
+    //result.push_back(Pair("clear-blacklist", BoolToString(FIREWALL_CLEAR_BLACKLIST)));
     result.push_back(Pair("clear-banlist", BoolToString(FIREWALL_CLEAR_BANS)));
     result.push_back(Pair("live-debug", BoolToString(FIREWALL_LIVE_DEBUG)));
     result.push_back(Pair("live-debug-exam", BoolToString(FIREWALL_LIVEDEBUG_EXAM)));
     result.push_back(Pair("live-debug-bans", BoolToString(FIREWALL_LIVEDEBUG_BANS)));
-    result.push_back(Pair("live-debug-blacklist", BoolToString(FIREWALL_LIVEDEBUG_BLACKLIST)));
+    //result.push_back(Pair("live-debug-blacklist", BoolToString(FIREWALL_LIVEDEBUG_BLACKLIST)));
     result.push_back(Pair("live-debug-disconnect", BoolToString(FIREWALL_LIVEDEBUG_DISCONNECT)));
     result.push_back(Pair("live-debug-bandwidthabuse", BoolToString(FIREWALL_LIVEDEBUG_BANDWIDTHABUSE)));
     result.push_back(Pair("live-debug-nofalsepositive", BoolToString(FIREWALL_LIVEDEBUG_NOFALSEPOSITIVE)));
@@ -686,10 +686,10 @@ UniValue firewallstatus(const JSONRPCRequest& request)
     result.push_back(Pair("detect-invalidwallet", BoolToString(FIREWALL_DETECT_INVALIDWALLET)));
     result.push_back(Pair("detect-forkedwallet", BoolToString(FIREWALL_DETECT_FORKEDWALLET)));
     result.push_back(Pair("detect-floodingwallet", BoolToString(FIREWALL_DETECT_FLOODINGWALLET)));
-    result.push_back(Pair("blacklist-bandwidthabuse", BoolToString(FIREWALL_BLACKLIST_BANDWIDTHABUSE)));
-    result.push_back(Pair("blacklist-invalidwallet", BoolToString(FIREWALL_BLACKLIST_INVALIDWALLET)));
-    result.push_back(Pair("blacklist-forkedwallet", BoolToString(FIREWALL_BLACKLIST_FORKEDWALLET)));
-    result.push_back(Pair("blacklist-floodingwallet", BoolToString(FIREWALL_BLACKLIST_FLOODINGWALLET)));
+    //result.push_back(Pair("blacklist-bandwidthabuse", BoolToString(FIREWALL_BLACKLIST_BANDWIDTHABUSE)));
+    //result.push_back(Pair("blacklist-invalidwallet", BoolToString(FIREWALL_BLACKLIST_INVALIDWALLET)));
+    //result.push_back(Pair("blacklist-forkedwallet", BoolToString(FIREWALL_BLACKLIST_FORKEDWALLET)));
+    //result.push_back(Pair("blacklist-floodingwallet", BoolToString(FIREWALL_BLACKLIST_FLOODINGWALLET)));
     result.push_back(Pair("ban-bandwidthabuse", BoolToString(FIREWALL_BAN_BANDWIDTHABUSE)));
     result.push_back(Pair("ban-invalidwallet", BoolToString(FIREWALL_BAN_INVALIDWALLET)));
     result.push_back(Pair("ban-forkedwallet", BoolToString(FIREWALL_BAN_FORKEDWALLET)));
@@ -738,7 +738,7 @@ UniValue firewallenabled(const JSONRPCRequest& request)
     return result;
 }
 
-
+/*
 UniValue firewallclearblacklist(const JSONRPCRequest& request)
 {
     std::string strCommand = "true";
@@ -773,7 +773,7 @@ UniValue firewallclearblacklist(const JSONRPCRequest& request)
 
     return result;
 }
-
+*/
 
 UniValue firewallclearbanlist(const JSONRPCRequest& request)
 {
@@ -917,6 +917,7 @@ UniValue firewalldebugbans(const JSONRPCRequest& request)
     return result;
 }
 
+/*
 UniValue firewalldebugblacklist(const JSONRPCRequest& request)
 {
     std::string strCommand = "true";
@@ -951,7 +952,7 @@ UniValue firewalldebugblacklist(const JSONRPCRequest& request)
 
     return result;
 }
-
+*/
 
 UniValue firewalldebugdisconnect(const JSONRPCRequest& request)
 {
@@ -1267,7 +1268,7 @@ UniValue firewalltrafficzone(const JSONRPCRequest& request)
     return result;
 }
 
-
+/*
 UniValue firewalladdtowhitelist(const JSONRPCRequest& request)
 {
     std::string MSG;
@@ -1302,8 +1303,9 @@ UniValue firewalladdtowhitelist(const JSONRPCRequest& request)
 
     return result;
 }
+*/
 
-
+/*
 UniValue firewalladdtoblacklist(const JSONRPCRequest& request)
 {
     std::string MSG;
@@ -1338,7 +1340,7 @@ UniValue firewalladdtoblacklist(const JSONRPCRequest& request)
 
     return result;
 }
-
+*/
 
 UniValue firewalldetectbandwidthabuse(const JSONRPCRequest& request)
 {
@@ -1374,7 +1376,7 @@ UniValue firewalldetectbandwidthabuse(const JSONRPCRequest& request)
     return result;
 }
 
-
+/*
 UniValue firewallblacklistbandwidthabuse(const JSONRPCRequest& request)
 {
     std::string strCommand = "true";
@@ -1408,7 +1410,7 @@ UniValue firewallblacklistbandwidthabuse(const JSONRPCRequest& request)
 
     return result;
 }
-
+*/
 
 UniValue firewallbanbandwidthabuse(const JSONRPCRequest& request)
 {
@@ -1616,7 +1618,7 @@ UniValue firewalldetectinvalidwallet(const JSONRPCRequest& request)
     return result;
 }
 
-
+/*
 UniValue firewallblacklistinvalidwallet(const JSONRPCRequest& request)
 {
     std::string strCommand = "true";
@@ -1650,7 +1652,7 @@ UniValue firewallblacklistinvalidwallet(const JSONRPCRequest& request)
 
     return result;
 }
-
+*/
 
 UniValue firewallbaninvalidwallet(const JSONRPCRequest& request)
 {
@@ -1799,7 +1801,7 @@ UniValue firewalldetectforkedwallet(const JSONRPCRequest& request)
     return result;
 }
 
-
+/*
 UniValue firewallblacklistforkedwallet(const JSONRPCRequest& request)
 {
     std::string strCommand = "true";
@@ -1833,7 +1835,7 @@ UniValue firewallblacklistforkedwallet(const JSONRPCRequest& request)
 
     return result;
 }
-
+*/
 
 UniValue firewallbanforkedwallet(const JSONRPCRequest& request)
 {
@@ -1966,7 +1968,7 @@ UniValue firewalldetectfloodingwallet(const JSONRPCRequest& request)
     return result;
 }
 
-
+/*
 UniValue firewallblacklistfloodingwallet(const JSONRPCRequest& request)
 {
     std::string strCommand = "true";

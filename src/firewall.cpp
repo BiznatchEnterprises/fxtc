@@ -65,9 +65,9 @@ std::string ModuleName = "[Bitcoin Firewall 1.3.0]";
 
 // *** Firewall Controls (General) ***
 bool FIREWALL_ENABLED = true;
-bool FIREWALL_CLEAR_BLACKLIST = false;
-bool FIREWALL_CLEAR_BANS = true;
-int FIREWALL_CLEARBANS_MINNODES = 5;
+//bool FIREWALL_CLEAR_BLACKLIST = false;
+bool FIREWALL_CLEAR_BANS = false;
+int FIREWALL_CLEARBANS_MINNODES = 1;
 double FIREWALL_TRAFFIC_TOLERANCE = 0.0001; // Reduce for minimal fluctuation
 double FIREWALL_TRAFFIC_ZONE = 4; // + or - Traffic Range 
 
@@ -75,7 +75,7 @@ double FIREWALL_TRAFFIC_ZONE = 4; // + or - Traffic Range
 bool FIREWALL_LIVE_DEBUG = false;
 bool FIREWALL_LIVEDEBUG_EXAM = true;
 bool FIREWALL_LIVEDEBUG_BANS = true;
-bool FIREWALL_LIVEDEBUG_BLACKLIST = true;
+//bool FIREWALL_LIVEDEBUG_BLACKLIST = true;
 bool FIREWALL_LIVEDEBUG_DISCONNECT = true;
 bool FIREWALL_LIVEDEBUG_BANDWIDTHABUSE = true;
 bool FIREWALL_LIVEDEBUG_NOFALSEPOSITIVE = true;
@@ -85,7 +85,7 @@ bool FIREWALL_LIVEDEBUG_FLOODINGWALLET = true;
 
 // *** Firewall Controls (Bandwidth Abuse) ***
 bool FIREWALL_DETECT_BANDWIDTHABUSE = true;
-bool FIREWALL_BLACKLIST_BANDWIDTHABUSE = true;
+//bool FIREWALL_BLACKLIST_BANDWIDTHABUSE = true;
 bool FIREWALL_BAN_BANDWIDTHABUSE = true;
 bool FIREWALL_NOFALSEPOSITIVE_BANDWIDTHABUSE = true;
 
@@ -96,12 +96,12 @@ bool FIREWALL_BAN_INVALIDWALLET = true;
 
 // *** Firewall Controls (Forked Peer Wallets) ***
 bool FIREWALL_DETECT_FORKEDWALLET = true;
-bool FIREWALL_BLACKLIST_FORKEDWALLET = true;
+//bool FIREWALL_BLACKLIST_FORKEDWALLET = true;
 bool FIREWALL_BAN_FORKEDWALLET = true;
 
 // *** Firewall Controls (Flooding Peer Wallets) ***
 bool FIREWALL_DETECT_FLOODINGWALLET = true;
-bool FIREWALL_BLACKLIST_FLOODINGWALLET = true;
+//bool FIREWALL_BLACKLIST_FLOODINGWALLET = true;
 bool FIREWALL_BAN_FLOODINGWALLET = true;
 
 // * Firewall Settings (General) *
@@ -147,16 +147,16 @@ int FIREWALL_FLOODINGWALLET_MINCHECK = 30; // seconds
 int FIREWALL_FLOODINGWALLET_MAXCHECK = 90; // seconds
 
 // Firewall Whitelist (ignore)
-string FIREWALL_WHITELIST[256] =
-{
+//string FIREWALL_WHITELIST[256] =
+//{
 
-};
+//};
 
 // * Firewall BlackList Settings *
-string FIREWALL_BLACKLIST[256] =
-{
+//string FIREWALL_BLACKLIST[256] =
+//{
 
-};
+//};
 
 // * Global Firewall Variables *
 bool Firewall_FirstRun = false;
@@ -175,14 +175,14 @@ void LoadFirewallSettings()
 {
     // *** Firewall Controls (General) ***
     FIREWALL_ENABLED = gArgs.GetBoolArg("-firewallenabled", FIREWALL_ENABLED);
-    FIREWALL_CLEAR_BLACKLIST = gArgs.GetBoolArg("-firewallclearblacklist", FIREWALL_CLEAR_BLACKLIST);
+    //FIREWALL_CLEAR_BLACKLIST = gArgs.GetBoolArg("-firewallclearblacklist", FIREWALL_CLEAR_BLACKLIST);
     FIREWALL_CLEAR_BANS = gArgs.GetBoolArg("-firewallclearbanlist", FIREWALL_CLEAR_BANS);
 
     // *** Firewall Debug (Live Output) ***
     FIREWALL_LIVE_DEBUG = gArgs.GetBoolArg("-firewalldebug", FIREWALL_LIVE_DEBUG);
     FIREWALL_LIVEDEBUG_EXAM = gArgs.GetBoolArg("-firewalldebugexam", FIREWALL_LIVEDEBUG_EXAM);
     FIREWALL_LIVEDEBUG_BANS = gArgs.GetBoolArg("-firewalldebugbans", FIREWALL_LIVEDEBUG_BANS);
-    FIREWALL_LIVEDEBUG_BLACKLIST = gArgs.GetBoolArg("-firewalldebugblacklist", FIREWALL_LIVEDEBUG_BLACKLIST);
+    //FIREWALL_LIVEDEBUG_BLACKLIST = gArgs.GetBoolArg("-firewalldebugblacklist", FIREWALL_LIVEDEBUG_BLACKLIST);
     FIREWALL_LIVEDEBUG_DISCONNECT = gArgs.GetBoolArg("-firewalldebugdisconnect", FIREWALL_LIVEDEBUG_DISCONNECT);
     FIREWALL_LIVEDEBUG_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewalldebugbandwidthabuse", FIREWALL_LIVEDEBUG_BANDWIDTHABUSE);
     FIREWALL_LIVEDEBUG_NOFALSEPOSITIVE = gArgs.GetBoolArg("-firewalldebugnofalsepositivebandwidthabuse", FIREWALL_LIVEDEBUG_NOFALSEPOSITIVE);
@@ -192,23 +192,23 @@ void LoadFirewallSettings()
 
     // *** Firewall Controls (Bandwidth Abuse) ***
     FIREWALL_DETECT_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewalldetectbandwidthabuse", FIREWALL_DETECT_BANDWIDTHABUSE);
-    FIREWALL_BLACKLIST_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewallblacklistbandwidthabuse", FIREWALL_BLACKLIST_BANDWIDTHABUSE);
+    //FIREWALL_BLACKLIST_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewallblacklistbandwidthabuse", FIREWALL_BLACKLIST_BANDWIDTHABUSE);
     FIREWALL_BAN_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewallbanbandwidthabuse", FIREWALL_BAN_BANDWIDTHABUSE);
     FIREWALL_NOFALSEPOSITIVE_BANDWIDTHABUSE = gArgs.GetBoolArg("-firewallnofalsepositivebandwidthabuse", FIREWALL_NOFALSEPOSITIVE_BANDWIDTHABUSE);
 
     // *** Firewall Controls (Invalid Peer Wallets) ***
     FIREWALL_DETECT_INVALIDWALLET = gArgs.GetBoolArg("-firewalldetectinvalidwallet", FIREWALL_DETECT_INVALIDWALLET);
-    FIREWALL_BLACKLIST_INVALIDWALLET = gArgs.GetBoolArg("-firewallblacklistinvalidwallet", FIREWALL_BLACKLIST_INVALIDWALLET);
+    //FIREWALL_BLACKLIST_INVALIDWALLET = gArgs.GetBoolArg("-firewallblacklistinvalidwallet", FIREWALL_BLACKLIST_INVALIDWALLET);
     FIREWALL_BAN_INVALIDWALLET = gArgs.GetBoolArg("-firewallbaninvalidwallet", FIREWALL_BAN_INVALIDWALLET);
 
     // *** Firewall Controls (Forked Peer Wallets) ***
     FIREWALL_DETECT_FORKEDWALLET = gArgs.GetBoolArg("-firewalldetectforkedwallet", FIREWALL_DETECT_FORKEDWALLET);
-    FIREWALL_BLACKLIST_FORKEDWALLET = gArgs.GetBoolArg("-firewallblacklistforkedwallet", FIREWALL_BLACKLIST_FORKEDWALLET);
+    //FIREWALL_BLACKLIST_FORKEDWALLET = gArgs.GetBoolArg("-firewallblacklistforkedwallet", FIREWALL_BLACKLIST_FORKEDWALLET);
     FIREWALL_BAN_FORKEDWALLET = gArgs.GetBoolArg("-firewallbanforkedwallet", FIREWALL_BAN_FORKEDWALLET);
 
     // *** Firewall Controls (Flooding Peer Wallets) ***
     FIREWALL_DETECT_FLOODINGWALLET = gArgs.GetBoolArg("-firewalldetectfloodingwallet", FIREWALL_DETECT_FLOODINGWALLET);
-    FIREWALL_BLACKLIST_FLOODINGWALLET = gArgs.GetBoolArg("-firewallblacklistfloodingwallet", FIREWALL_BLACKLIST_FLOODINGWALLET);
+    //FIREWALL_BLACKLIST_FLOODINGWALLET = gArgs.GetBoolArg("-firewallblacklistfloodingwallet", FIREWALL_BLACKLIST_FLOODINGWALLET);
     FIREWALL_BAN_FLOODINGWALLET = gArgs.GetBoolArg("-firewallbanfloodingwallet", FIREWALL_BAN_FLOODINGWALLET);
 
     // * Firewall Settings (Exam) *
@@ -276,6 +276,7 @@ bool ForceDisconnectNode(CNode *pnode, string FromFunction)
     return false;
 }
 
+/*
 // * Function: CheckWhiteList *
 bool CheckWhiteList(CNode *pnode)
 {
@@ -300,7 +301,9 @@ bool CheckWhiteList(CNode *pnode)
     // Whitelisted IP not found
     return false;
 }
+*/
 
+/*
 // * Function: CheckBlackList *
 bool CheckBlackList(CNode *pnode)
 {
@@ -325,8 +328,9 @@ bool CheckBlackList(CNode *pnode)
     // Banned IP not found
     return false;
 }
+*/
 
-
+/*
 // * Function: AddToBlackList *
 bool AddToBlackList(CNode *pnode, string FromFunction)
 {
@@ -365,7 +369,7 @@ bool AddToBlackList(CNode *pnode, string FromFunction)
     // Blacklisted IP not found
     return false;
 }
-
+*/
 
 // * Function:  *
 bool CheckBanned(CNode *pnode)
@@ -1122,11 +1126,13 @@ bool FireWall(CNode *pnode, string FromFunction)
         return false;
     }
 
+    /*
     if (CheckWhiteList(pnode) == true)
     {
         // Skip Firewall Analysis
         return false;
     }
+    */
     
     // Check for Node Global Whitelisted status
     if (pnode->fWhitelisted == true)
@@ -1159,6 +1165,7 @@ bool FireWall(CNode *pnode, string FromFunction)
         }
     }
     
+    /*
     if (CheckBlackList(pnode) == true)
     {
         FromFunction = "CheckBlackList";
@@ -1172,26 +1179,11 @@ bool FireWall(CNode *pnode, string FromFunction)
         return true;
 
     }
-
-    if (CheckBanned(pnode) == true)
-    {
-        FromFunction = "CheckBanned";
-
-        LogPrintf("%s -%s- Node/Peer Already Banned: addr=%s fNetworkNode=%d fInbound=%d fMasternode=%d\n",
-            ModuleName.c_str(), FromFunction, pnode->addr.ToString(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode
-        );
-
-        // Peer/Node Panic Disconnect
-        ForceDisconnectNode(pnode, FromFunction);
-        return true;
-
-    }
-    
-
+    */
 
     // Perform a Node consensus examination
     Examination(pnode, FromFunction);
- 
+
 
     // Peer/Node Safe    
     return false;
