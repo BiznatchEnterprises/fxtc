@@ -2006,7 +2006,7 @@ static const CRPCCommand commands[] =
     { "network",            "firewallclearbanlist",                               &firewallclearbanlist,                               {"state"} }, 
     { "network",            "firewalldebug",                                      &firewalldebug,                                      {"state"} },
     { "network",            "firewalldebugexam",                                  &firewalldebugexam,                                  {"state"} },
-    { "network",            "firewalldebugexambans",                              &firewalldebugexambans,                              {"state"} },
+    { "network",            "firewalldebugbans",                                  &firewalldebugbans,                                  {"state"} },
     { "network",            "firewalldebugdisconnect",                            &firewalldebugdisconnect,                            {"state"} },
     { "network",            "firewalldebugbandwidthabuse",                        &firewalldebugbandwidthabuse,                        {"state"} },
     { "network",            "firewalldebugnofalsepositivebandwidthabuse",         &firewalldebugnofalsepositivebandwidthabuse,         {"state"} },
